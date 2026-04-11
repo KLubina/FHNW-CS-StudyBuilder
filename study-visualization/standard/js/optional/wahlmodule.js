@@ -254,6 +254,16 @@ window.StudienplanWahlmodule = {
       .trim()
       .toLowerCase();
 
+    const categoryAliases = {
+      vertiefungen: "vertiefung",
+      fachergänzungen: "fachgrundlagen",
+      fachergaenzungen: "fachgrundlagen",
+    };
+
+    if (categoryAliases[normalizedName]) {
+      return categoryAliases[normalizedName];
+    }
+
     const categoryConfig = window.StudiengangCategoriesConfig?.kategorien || [];
     const matchedCategory = categoryConfig.find(
       (category) =>
