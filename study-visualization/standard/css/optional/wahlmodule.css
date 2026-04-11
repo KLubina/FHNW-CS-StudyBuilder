@@ -377,19 +377,27 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.wahlmodule-fixed-grid {
+.projekte-bereich {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #dbe7f7;
+}
+
+.projekte-title {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+  color: #1f2937;
+}
+
+.projekte-module-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
+  align-items: flex-start;
 }
 
-.wahlmodule-fixed-grid .modul {
-  cursor: default;
-}
-
-.wahlmodule-fixed-grid .modul:hover {
-  transform: none;
-  box-shadow: none;
+.projekte-module-row .modul {
+  flex: 0 0 auto;
 }
 
 /* Responsive */
@@ -416,5 +424,9 @@
   .wahlmodul-cancel,
   .wahlmodul-confirm {
     width: 100%;
+  }
+
+  .projekte-module-row {
+    flex-wrap: wrap;
   }
 }

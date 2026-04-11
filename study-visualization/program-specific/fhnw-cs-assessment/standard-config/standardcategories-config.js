@@ -9,9 +9,9 @@ window.StudiengangCategoriesConfig = {
       klasse: "fachgrundlagen",
     },
     { name: "Programmierung", klasse: "vertiefung" },
-    { name: "Systeme", klasse: "systeme" },
+    { name: "Systeme", klasse: "projekt" },
     { name: "Software Engineering", klasse: "software-engineering" },
+    { name: "Projekte", klasse: "projekte" },
     { name: "Ergänzungen", klasse: "kontext" },
-    { name: "Projekte", klasse: "projekt" },
   ],
 };

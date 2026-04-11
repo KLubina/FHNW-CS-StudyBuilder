@@ -56,6 +56,14 @@ window.StudienplanConfigLoader = {
         // Optional
       }
 
+      // Lade feste Projektmodule falls vorhanden
+      const projectModulesPath = `../program-specific/${studiengang}/data/project-modules-data.js`;
+      try {
+        await this.loadScript(projectModulesPath);
+      } catch (e) {
+        // Optional
+      }
+
       // Major-Minor Legacy Handling:
       // Check if global variable for modules is set after loading.
       // Major-Minor files might define variables ending in 'PflichtmoduleData'.

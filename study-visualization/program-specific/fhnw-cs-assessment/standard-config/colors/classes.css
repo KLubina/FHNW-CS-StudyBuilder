@@ -13,12 +13,6 @@
   color: var(--color-vertiefung-text, white);
 }
 
-[data-studiengang="fhnw-cs-assessment"] .modul.systeme,
-[data-studiengang="fhnw-cs-assessment"] .legende-item.systeme {
-  background-color: var(--color-systeme);
-  color: var(--color-systeme-text, white);
-}
-
 [data-studiengang="fhnw-cs-assessment"] .modul.projekt,
 [data-studiengang="fhnw-cs-assessment"] .legende-item.projekt {
   background-color: var(--color-projekt);
@@ -29,6 +23,12 @@
 [data-studiengang="fhnw-cs-assessment"] .legende-item.software-engineering {
   background-color: var(--color-software-engineering);
   color: var(--color-software-engineering-text, white);
+}
+
+[data-studiengang="fhnw-cs-assessment"] .modul.projekte,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.projekte {
+  background-color: var(--color-projekte);
+  color: var(--color-projekte-text, white);
 }
 
 [data-studiengang="fhnw-cs-assessment"] .modul.kontext,

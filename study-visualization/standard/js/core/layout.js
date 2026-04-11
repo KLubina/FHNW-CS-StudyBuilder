@@ -12,7 +12,9 @@ window.StudienplanLayout = {
     const layoutHTML =
       years
         .map((year) => this.renderYear(year, groupedModules[year]))
-        .join("") + this.renderWahlmoduleSections();
+        .join("") +
+      this.renderWahlmoduleSections() +
+      this.renderProjectSection();
 
     container.innerHTML = layoutHTML;
   },
@@ -39,6 +41,25 @@ window.StudienplanLayout = {
         `;
   },
 
+  renderProjectSection() {
+    const modules =
+      window.FHNWCSAssessmentProjectModules ||
+      window.StudiengangProjectModules ||
+      [];
+    if (!Array.isArray(modules) || modules.length === 0) return "";
+
+    const moduleRow = window.StudienplanModule.renderSemesterModules(modules);
+
+    return `
+            <div class="projekte-bereich">
+                <h3 class="projekte-title">Projekte</h3>
+                <div class="projekte-module-row">
+                    ${moduleRow}
+                </div>
+            </div>
+        `;
+  },
+
   renderWahlmoduleSection(section) {
     const title = section.title || section.category || "Wahlmodule";
     const category = section.category || title;
@@ -58,33 +79,6 @@ window.StudienplanLayout = {
       wahlmodulSource: source,
       wahlmodulCategory: category,
     };
-
-    if (
-      Array.isArray(section.fixedModules) &&
-      section.fixedModules.length > 0
-    ) {
-      const fixedModulesHtml = section.fixedModules
-        .map((module) =>
-          window.StudienplanModule.renderModule({
-            ...module,
-            standardcategory: className,
-          }),
-        )
-        .join("");
-
-      return `
-            <div class="wahlmodule-section" data-wahlmodul-category="${escapeHtml(category)}">
-                <div class="wahlmodule-section-header">
-                    <div class="wahlmodule-section-title">${escapeHtml(title)}</div>
-                </div>
-                <div class="wahlmodule-section-block">
-                    <div class="wahlmodule-fixed-grid">
-                        ${fixedModulesHtml}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
 
     return `
             <div class="wahlmodule-section" data-wahlmodul-category="${escapeHtml(category)}">

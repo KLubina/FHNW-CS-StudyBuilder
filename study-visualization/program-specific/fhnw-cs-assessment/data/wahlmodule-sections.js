@@ -10,7 +10,7 @@ window.FHNWCSAssessmentWahlmoduleSections = [
   {
     title: "Systeme",
     category: "Systeme",
-    className: "systeme",
+    className: "projekt",
     source: "wahlmodule-data.js",
   },
   {
@@ -24,18 +24,5 @@ window.FHNWCSAssessmentWahlmoduleSections = [
     category: "Theoretische Grundlagen und Mathematik",
     className: "fachgrundlagen",
     source: "wahlmodule-data.js",
-  },
-  {
-    title: "Projekte",
-    category: "Projekte",
-    className: "projekt",
-    fixedModules: [
-      { name: "Projekt 1", ects: 6 },
-      { name: "Projekt 2", ects: 6 },
-      { name: "Projekt 3", ects: 6 },
-      { name: "Projekt 4", ects: 6 },
-      { name: "Projekt 5", ects: 6 },
-      { name: "Bachelor-Thesis", ects: 12 },
-    ],
   },
 ];
