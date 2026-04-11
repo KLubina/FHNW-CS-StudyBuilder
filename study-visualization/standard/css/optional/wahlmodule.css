@@ -358,8 +358,9 @@
 }
 
 .wahlmodule-section-meta {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #6b7280;
+  font-weight: 500;
 }
 
 .wahlmodule-section-block .modul-platzhalter {

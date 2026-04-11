@@ -65,6 +65,7 @@ window.StudienplanLayout = {
     const category = section.category || title;
     const source = section.source || "wahlmodule-data.js";
     const className = section.className || "Ergänzungen";
+    const minEcts = Number(section.minEcts || 0);
     const escapeHtml = (value) =>
       String(value)
         .replace(/&/g, "&amp;")
@@ -84,6 +85,7 @@ window.StudienplanLayout = {
             <div class="wahlmodule-section" data-wahlmodul-category="${escapeHtml(category)}">
                 <div class="wahlmodule-section-header">
                     <div class="wahlmodule-section-title">${escapeHtml(title)}</div>
+            <div class="wahlmodule-section-meta">mind. ${minEcts} ECTS</div>
                 </div>
                 <div class="wahlmodule-section-block">
                     ${window.StudienplanModule.renderModule(placeholderModule)}
