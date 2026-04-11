@@ -4,9 +4,13 @@
 window.StudiengangCategoriesConfig = {
   // Category definitions
   kategorien: [
-    { name: "Fachgrundlagen & Fachergänzungen", klasse: "fachgrundlagen" },
-    { name: "Vertiefungen", klasse: "vertiefung" },
-    { name: "Projekte", klasse: "projekt" },
-    { name: "Kontext", klasse: "kontext" },
+    {
+      name: "Theoretische Grundlagen und Mathematik",
+      klasse: "fachgrundlagen",
+    },
+    { name: "Programmierung", klasse: "vertiefung" },
+    { name: "Systeme", klasse: "projekt" },
+    { name: "Software Engineering", klasse: "software-engineering" },
+    { name: "Ergänzungen", klasse: "kontext" },
   ],
 };

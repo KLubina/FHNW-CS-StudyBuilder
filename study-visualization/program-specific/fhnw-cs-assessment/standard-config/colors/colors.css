@@ -6,8 +6,9 @@
   --color-primary: #1d4ed8;
 
   /* Category colors */
-  --color-fachgrundlagen: #0284c7;
-  --color-vertiefung: #8b5cf6;
-  --color-projekt: #7c3aed;
-  --color-kontext: #059669;
+  --color-fachgrundlagen: #0ea5e9;
+  --color-vertiefung: #f97316;
+  --color-projekt: #16a34a;
+  --color-software-engineering: #0f766e;
+  --color-kontext: #64748b;
 }

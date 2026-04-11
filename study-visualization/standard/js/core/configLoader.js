@@ -164,15 +164,31 @@ window.StudienplanConfigLoader = {
       }));
     }
 
+    const normalizeCategoryName = (name) =>
+      (name || "")
+        .trim()
+        .replace(/^[-*]\s+/, "")
+        .toLowerCase();
+
     const categoryMap = {};
     window.StudiengangCategoriesConfig.kategorien.forEach((cat) => {
-      categoryMap[cat.name] = cat.klasse;
+      categoryMap[normalizeCategoryName(cat.name)] = cat.klasse;
     });
+
+    // Backward-compatible aliases for renamed legend categories
+    const legacyAliases = {
+      "fachgrundlagen & fachergänzungen": "fachgrundlagen",
+      vertiefungen: "vertiefung",
+      projekte: "projekt",
+      kontext: "kontext",
+      "software engineering": "kontext",
+    };
 
     return modules.map((module) => ({
       ...module,
       standardcategory:
-        categoryMap[module.standardcategory] ||
+        categoryMap[normalizeCategoryName(module.standardcategory)] ||
+        legacyAliases[normalizeCategoryName(module.standardcategory)] ||
         this.getCategoryFromColorConfig(module) ||
         this.simplifyCategory(module.standardcategory),
     }));

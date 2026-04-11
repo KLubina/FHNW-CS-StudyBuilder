@@ -5,7 +5,7 @@ window.StudiengangModules = [
   {
     name: "Software Engineering Fundamentals",
     ects: 3,
-    standardcategory: "Vertiefungen",
+    standardcategory: "Software Engineering",
     orientationRank: 1,
     year: 1,
     semester: 1,
@@ -14,7 +14,7 @@ window.StudiengangModules = [
   {
     name: "User Centered Design and Requirements Engineering",
     ects: 6,
-    standardcategory: "Vertiefungen",
+    standardcategory: "Software Engineering",
     orientationRank: 1,
     year: 1,
     semester: 1,
@@ -23,7 +23,7 @@ window.StudiengangModules = [
   {
     name: "Programmieren 1",
     ects: 6,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Programmierung",
     orientationRank: 1,
     year: 1,
     semester: 1,
@@ -32,7 +32,7 @@ window.StudiengangModules = [
   {
     name: "Informationssysteme",
     ects: 6,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Systeme",
     orientationRank: 1,
     year: 1,
     semester: 1,
@@ -41,7 +41,7 @@ window.StudiengangModules = [
   {
     name: "Mathematische Grundlagen der Informatik",
     ects: 3,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Theoretische Grundlagen und Mathematik",
     orientationRank: 3,
     year: 1,
     semester: 1,
@@ -52,7 +52,7 @@ window.StudiengangModules = [
   {
     name: "Individuelles Softwareprojekte",
     ects: 6,
-    standardcategory: "Projekte",
+    standardcategory: "Ergänzungen",
     orientationRank: 1,
     year: 1,
     semester: 2,
@@ -61,7 +61,7 @@ window.StudiengangModules = [
   {
     name: "Data & AI Fundation",
     ects: 6,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Ergänzungen",
     orientationRank: 1,
     year: 1,
     semester: 2,
@@ -70,7 +70,7 @@ window.StudiengangModules = [
   {
     name: "Programmieren 2",
     ects: 6,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Programmierung",
     orientationRank: 1,
     year: 1,
     semester: 2,
@@ -79,7 +79,7 @@ window.StudiengangModules = [
   {
     name: "System Engineering",
     ects: 6,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Systeme",
     orientationRank: 1,
     year: 1,
     semester: 2,
@@ -88,7 +88,7 @@ window.StudiengangModules = [
   {
     name: "Lineare Algebra",
     ects: 3,
-    standardcategory: "Fachgrundlagen & Fachergänzungen",
+    standardcategory: "Theoretische Grundlagen und Mathematik",
     orientationRank: 3,
     year: 1,
     semester: 2,
