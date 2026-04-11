@@ -246,6 +246,29 @@ window.StudienplanWahlmodule = {
       .replace(/"/g, "&quot;");
   },
 
+  resolveCategoryClass(categoryName) {
+    const normalizedName = String(categoryName || "")
+      .trim()
+      .toLowerCase();
+
+    const categoryConfig = window.StudiengangCategoriesConfig?.kategorien || [];
+    const matchedCategory = categoryConfig.find(
+      (category) =>
+        String(category.name || "")
+          .trim()
+          .toLowerCase() === normalizedName,
+    );
+
+    if (matchedCategory?.klasse) {
+      return matchedCategory.klasse;
+    }
+
+    return normalizedName
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+  },
+
   // Fügt Event Listener zum Dialog hinzu
   attachDialogListeners(overlay, modules, placeholderElement) {
     const closeBtn = overlay.querySelector(".wahlmodul-close");
@@ -343,7 +366,11 @@ window.StudienplanWahlmodule = {
 
     // Füge ausgewählte Module hinzu
     selectedModules.forEach((module) => {
-      const moduleHTML = window.StudienplanModule.renderModule(module);
+      const moduleForRender = {
+        ...module,
+        standardcategory: this.resolveCategoryClass(module.standardcategory),
+      };
+      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = moduleHTML;
       const moduleElement = tempDiv.firstElementChild;
