@@ -56,6 +56,14 @@ window.StudienplanConfigLoader = {
         // Optional
       }
 
+      // Lade Vertiefungen/Fachergänzungen-Sektionen falls vorhanden
+      const vertiefungenSectionsPath = `../program-specific/${studiengang}/data/vertiefungen-sections.js`;
+      try {
+        await this.loadScript(vertiefungenSectionsPath);
+      } catch (e) {
+        // Optional
+      }
+
       // Lade Kontext-Sektionen falls vorhanden
       const contextSectionsPath = `../program-specific/${studiengang}/data/context-sections.js`;
       try {

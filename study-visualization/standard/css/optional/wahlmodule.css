@@ -401,6 +401,24 @@
   flex: 0 0 auto;
 }
 
+.vertiefungen-bereich {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #dbe7f7;
+}
+
+.vertiefungen-title {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+  color: #1f2937;
+}
+
+.vertiefungen-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
 .kontext-bereich {
   margin-top: 32px;
   padding-top: 24px;
@@ -482,6 +500,10 @@
   }
 
   .kontext-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .vertiefungen-sections {
     grid-template-columns: 1fr;
   }
 }

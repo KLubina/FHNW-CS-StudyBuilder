@@ -88,6 +88,7 @@ window.StudienplanWahlmodule = {
         // Mappe Dateinamen zu erwarteten Variablennamen
         const sourceToVarMap = {
           "wahlmodule-data.js": "FHNWCSAssessmentWahlmoduleData",
+          "vertiefungen-data.js": "FHNWCSAssessmentVertiefungenData",
           "context-modules-data.js": "FHNWCSAssessmentContextModulesData",
           "seminar-data.js": "PolisciSeminarData",
           "vertiefungsmodule-data.js": "PolisciVertiefungsmoduleData",

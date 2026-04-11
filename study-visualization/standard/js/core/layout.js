@@ -14,6 +14,7 @@ window.StudienplanLayout = {
         .map((year) => this.renderYear(year, groupedModules[year]))
         .join("") +
       this.renderWahlmoduleSections() +
+      this.renderVertiefungenSections() +
       this.renderContextSections() +
       this.renderProjectSection();
 
@@ -56,6 +57,27 @@ window.StudienplanLayout = {
                 <h3 class="projekte-title">Projekte</h3>
                 <div class="projekte-module-row">
                     ${moduleRow}
+                </div>
+            </div>
+        `;
+  },
+
+  renderVertiefungenSections() {
+    const sections =
+      window.FHNWCSAssessmentVertiefungenSections ||
+      window.StudiengangVertiefungenSections ||
+      [];
+    if (!Array.isArray(sections) || sections.length === 0) return "";
+
+    const blocks = sections
+      .map((section) => this.renderWahlmoduleSection(section))
+      .join("");
+
+    return `
+            <div class="vertiefungen-bereich">
+                <h3 class="vertiefungen-title">Vertiefungen und Fachergänzungen</h3>
+                <div class="vertiefungen-sections">
+                    ${blocks}
                 </div>
             </div>
         `;
