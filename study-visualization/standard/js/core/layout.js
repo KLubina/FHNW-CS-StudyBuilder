@@ -14,6 +14,7 @@ window.StudienplanLayout = {
         .map((year) => this.renderYear(year, groupedModules[year]))
         .join("") +
       this.renderWahlmoduleSections() +
+      this.renderContextSections() +
       this.renderProjectSection();
 
     container.innerHTML = layoutHTML;
@@ -55,6 +56,61 @@ window.StudienplanLayout = {
                 <h3 class="projekte-title">Projekte</h3>
                 <div class="projekte-module-row">
                     ${moduleRow}
+                </div>
+            </div>
+        `;
+  },
+
+  renderContextSections() {
+    const sections =
+      window.FHNWCSAssessmentContextSections ||
+      window.StudiengangContextSections ||
+      [];
+    if (!Array.isArray(sections) || sections.length === 0) return "";
+
+    const blocks = sections
+      .map((section) => this.renderContextSection(section))
+      .join("");
+
+    return `
+            <div class="kontext-bereich">
+                <h3 class="kontext-title">Kontext</h3>
+                <div class="kontext-sections">
+                    ${blocks}
+                </div>
+            </div>
+        `;
+  },
+
+  renderContextSection(section) {
+    const title = section.title || section.category || "Kontext";
+    const category = section.category || title;
+    const source = section.source || "context-modules-data.js";
+    const className = section.className || "kontext";
+    const minEcts = Number(section.minEcts || 0);
+    const escapeHtml = (value) =>
+      String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    const placeholderModule = {
+      name: title,
+      ects: 0,
+      standardcategory: className,
+      isPlaceholder: true,
+      wahlmodulSource: source,
+      wahlmodulCategory: category,
+    };
+
+    return `
+            <div class="kontext-section" data-wahlmodul-category="${escapeHtml(category)}">
+                <div class="kontext-section-header">
+                    <div class="kontext-section-title">${escapeHtml(title)}</div>
+                    <div class="kontext-section-meta">mind. ${minEcts} ECTS</div>
+                </div>
+                <div class="kontext-section-block">
+                    ${window.StudienplanModule.renderModule(placeholderModule)}
                 </div>
             </div>
         `;

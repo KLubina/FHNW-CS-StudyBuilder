@@ -56,6 +56,14 @@ window.StudienplanConfigLoader = {
         // Optional
       }
 
+      // Lade Kontext-Sektionen falls vorhanden
+      const contextSectionsPath = `../program-specific/${studiengang}/data/context-sections.js`;
+      try {
+        await this.loadScript(contextSectionsPath);
+      } catch (e) {
+        // Optional
+      }
+
       // Lade feste Projektmodule falls vorhanden
       const projectModulesPath = `../program-specific/${studiengang}/data/project-modules-data.js`;
       try {

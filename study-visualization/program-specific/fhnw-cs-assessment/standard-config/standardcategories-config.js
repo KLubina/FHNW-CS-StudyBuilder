@@ -12,6 +12,9 @@ window.StudiengangCategoriesConfig = {
     { name: "Systeme", klasse: "projekt" },
     { name: "Software Engineering", klasse: "software-engineering" },
     { name: "Projekte", klasse: "projekte" },
+    { name: "Kommunikation", klasse: "kommunikation" },
+    { name: "BWL", klasse: "bwl" },
+    { name: "Englisch", klasse: "englisch" },
     { name: "Ergänzungen", klasse: "kontext" },
   ],
 };

@@ -31,6 +31,24 @@
   color: var(--color-projekte-text, white);
 }
 
+[data-studiengang="fhnw-cs-assessment"] .modul.kommunikation,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.kommunikation {
+  background-color: var(--color-kommunikation);
+  color: var(--color-kommunikation-text, white);
+}
+
+[data-studiengang="fhnw-cs-assessment"] .modul.bwl,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.bwl {
+  background-color: var(--color-bwl);
+  color: var(--color-bwl-text, white);
+}
+
+[data-studiengang="fhnw-cs-assessment"] .modul.englisch,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.englisch {
+  background-color: var(--color-englisch);
+  color: var(--color-englisch-text, white);
+}
+
 [data-studiengang="fhnw-cs-assessment"] .modul.kontext,
 [data-studiengang="fhnw-cs-assessment"] .legende-item.kontext {
   background-color: var(--color-kontext);

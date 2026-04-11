@@ -401,6 +401,56 @@
   flex: 0 0 auto;
 }
 
+.kontext-bereich {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #dbe7f7;
+}
+
+.kontext-title {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+  color: #1f2937;
+}
+
+.kontext-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.kontext-section {
+  background: #fff;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.kontext-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.kontext-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.kontext-section-meta {
+  font-size: 0.82rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.kontext-section-block .modul-platzhalter {
+  width: 100% !important;
+  min-height: 180px !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .wahlmodul-dialog {
@@ -429,5 +479,9 @@
 
   .projekte-module-row {
     flex-wrap: wrap;
+  }
+
+  .kontext-sections {
+    grid-template-columns: 1fr;
   }
 }
