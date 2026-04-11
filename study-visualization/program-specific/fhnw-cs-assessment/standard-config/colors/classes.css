@@ -49,6 +49,12 @@
   color: var(--color-englisch-text, white);
 }
 
+[data-studiengang="fhnw-cs-assessment"] .modul.gsw,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.gsw {
+  background-color: var(--color-gsw);
+  color: var(--color-gsw-text, white);
+}
+
 [data-studiengang="fhnw-cs-assessment"] .modul.kontext,
 [data-studiengang="fhnw-cs-assessment"] .legende-item.kontext {
   background-color: var(--color-kontext);

@@ -228,7 +228,8 @@ window.StudienplanWahlmodule = {
     const categoryMap = new Map();
 
     modules.forEach((module) => {
-      const category = module.standardcategory || "Ohne Kategorie";
+      const category =
+        module.subcategory || module.standardcategory || "Ohne Kategorie";
       if (!categoryMap.has(category)) {
         categoryMap.set(category, []);
         grouped.push({ category, modules: categoryMap.get(category) });

@@ -15,6 +15,7 @@ window.StudiengangCategoriesConfig = {
     { name: "Kommunikation", klasse: "kommunikation" },
     { name: "BWL", klasse: "bwl" },
     { name: "Englisch", klasse: "englisch" },
+    { name: "GSW", klasse: "gsw" },
     { name: "Ergänzungen", klasse: "kontext" },
   ],
 };
