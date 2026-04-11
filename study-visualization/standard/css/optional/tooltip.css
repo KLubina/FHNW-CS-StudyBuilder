@@ -1,0 +1,112 @@
+/* ==== TOOLTIP COMPONENT ==== */
+/* Module detail tooltips */
+
+.tooltip-container {
+  position: absolute;
+  max-width: var(--tooltip-max-width);
+  width: var(--tooltip-width);
+  background-color: var(--tooltip-bg);
+  color: var(--color-text);
+  text-align: left;
+  border-radius: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: var(--z-tooltip);
+  border: 1px solid var(--color-border);
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-y: auto;
+  max-height: var(--tooltip-max-height);
+  display: none;
+  pointer-events: auto;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  width: 20px;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: var(--font-size-modul-titel);
+  color: #666;
+}
+
+.close-btn:hover {
+  background-color: #ddd;
+  color: var(--color-text);
+}
+
+/* Tooltip Content */
+.tooltip-container h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-xs);
+}
+
+.tooltip-container h4 {
+  margin: 12px 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-modul-titel);
+}
+
+.tooltip-container p {
+  margin: var(--spacing-xs) 0;
+  font-size: 13px;
+}
+
+.tooltip-container ul {
+  margin: var(--spacing-xs) 0;
+  padding-left: var(--spacing-lg);
+}
+
+.tooltip-container li {
+  margin-bottom: 3px;
+}
+
+/* ==== TOOLTIP LINKS ==== */
+
+.tooltip-container a {
+  color: var(--color-hub-button);
+  text-decoration: underline;
+}
+
+.tooltip-container a:hover {
+  color: var(--color-hub-button-hover);
+  text-decoration: underline;
+}
+
+.tooltip-container a:active {
+  color: #003d7a;
+}
+
+.tooltip-container a.tooltip-resource-button {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  text-decoration: none;
+  background: #f5f8fb;
+}
+
+.tooltip-container a.tooltip-resource-button:hover {
+  background: #e7eef6;
+  text-decoration: none;
+}
+
+.tooltip-container a.tooltip-resource-button::after {
+  content: "";
+}
+
+/* External Link Icon */
+.tooltip-container a::after {
+  content: " ↗";
+  font-size: 0.8em;
+  vertical-align: super;
+  opacity: 0.7;
+}

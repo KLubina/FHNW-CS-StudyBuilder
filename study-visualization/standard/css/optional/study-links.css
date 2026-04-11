@@ -1,0 +1,35 @@
+/* ==== STUDY LINKS COMPONENT ==== */
+/* Related study program links */
+
+.studien-links {
+    text-align: center;
+    margin: var(--spacing-md) auto var(--spacing-xl);
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    max-width: 800px;
+}
+
+.studien-link-button {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: var(--font-size-modul-titel);
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+}
+
+.studien-link-button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    color: #000;
+    text-decoration: none;
+}
+
+.studien-link-button:active {
+    opacity: 0.9;
+}
