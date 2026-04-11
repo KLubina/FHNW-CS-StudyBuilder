@@ -12,10 +12,15 @@ window.StudienplanWahlmodule = {
       if (!modul) return;
 
       const source = modul.getAttribute("data-wahlmodul-source");
+      const category = modul.getAttribute("data-wahlmodul-category");
       if (source) {
         e.preventDefault();
         e.stopPropagation();
-        window.StudienplanWahlmodule.openWahlmodulDialog(source, modul);
+        window.StudienplanWahlmodule.openWahlmodulDialog(
+          source,
+          modul,
+          category,
+        );
       }
     });
 
@@ -31,17 +36,29 @@ window.StudienplanWahlmodule = {
   },
 
   // Öffnet Dialog zur Modulauswahl
-  async openWahlmodulDialog(source, modulElement) {
+  async openWahlmodulDialog(source, modulElement, categoryFilter = null) {
     try {
       // Lade Modul-Daten
       const modules = await this.loadWahlmodulData(source);
-      if (!modules || modules.length === 0) {
+      const filteredModules = categoryFilter
+        ? modules.filter(
+            (module) =>
+              String(module.standardcategory || "").trim() ===
+              String(categoryFilter || "").trim(),
+          )
+        : modules;
+
+      if (!filteredModules || filteredModules.length === 0) {
         alert("Keine Wahlmodule gefunden für: " + source);
         return;
       }
 
       // Zeige Dialog
-      this.showModulSelectionDialog(modules, modulElement);
+      this.showModulSelectionDialog(
+        filteredModules,
+        modulElement,
+        categoryFilter,
+      );
     } catch (error) {
       console.error("Fehler beim Laden der Wahlmodule:", error);
       alert("Fehler beim Laden der Wahlmodule: " + error.message);
@@ -70,7 +87,7 @@ window.StudienplanWahlmodule = {
       script.onload = () => {
         // Mappe Dateinamen zu erwarteten Variablennamen
         const sourceToVarMap = {
-          "wahlmodule-data.js": "PolisciWahlmoduleData",
+          "wahlmodule-data.js": "FHNWCSAssessmentWahlmoduleData",
           "seminar-data.js": "PolisciSeminarData",
           "vertiefungsmodule-data.js": "PolisciVertiefungsmoduleData",
           "specialisationmodule-data.js": "SpecialisationModuleData",
@@ -121,7 +138,7 @@ window.StudienplanWahlmodule = {
   },
 
   // Zeigt den Auswahl-Dialog an
-  showModulSelectionDialog(modules, placeholderElement) {
+  showModulSelectionDialog(modules, placeholderElement, categoryFilter = null) {
     // Hole bereits ausgewählte Module aus dem Platzhalter
     let selectedModules = [];
     if (placeholderElement.dataset.selectedModules) {
@@ -140,7 +157,7 @@ window.StudienplanWahlmodule = {
     overlay.innerHTML = `
             <div class="wahlmodul-dialog">
                 <div class="wahlmodul-header">
-                    <h3>Wahlmodule auswählen</h3>
+                  <h3>${categoryFilter ? `Wahlmodule: ${this.escapeHtml(categoryFilter)}` : "Wahlmodule nach Kategorie auswählen"}</h3>
                     <button class="wahlmodul-close" title="Schließen">×</button>
                 </div>
                 <div class="wahlmodul-body">
@@ -170,25 +187,63 @@ window.StudienplanWahlmodule = {
 
   // Rendert die Modulliste
   renderModulList(modules, selectedModules = []) {
-    return modules
-      .map((module, index) => {
-        // Prüfe ob dieses Modul bereits ausgewählt ist
-        const isSelected = selectedModules.some(
-          (m) => m.name === module.name && m.ects === module.ects,
-        );
-        const checkedAttr = isSelected ? "checked" : "";
+    const groupedModules = this.groupModulesByCategory(modules);
+    let index = 0;
 
-        return `
-            <div class="wahlmodul-item" data-index="${index}">
-                <input type="checkbox" id="wahlmodul-${index}" class="wahlmodul-checkbox" ${checkedAttr}>
-                <label for="wahlmodul-${index}">
-                    <span class="wahlmodul-name">${module.name}</span>
+    return groupedModules
+      .map(({ category, modules: categoryModules }) => {
+        const itemsHtml = categoryModules
+          .map((module) => {
+            const currentIndex = index++;
+            const isSelected = selectedModules.some(
+              (m) => m.name === module.name && m.ects === module.ects,
+            );
+            const checkedAttr = isSelected ? "checked" : "";
+
+            return `
+            <div class="wahlmodul-item" data-index="${currentIndex}" data-category="${this.escapeHtml(category)}">
+                <input type="checkbox" id="wahlmodul-${currentIndex}" class="wahlmodul-checkbox" ${checkedAttr}>
+                <label for="wahlmodul-${currentIndex}">
+                    <span class="wahlmodul-name">${this.escapeHtml(module.name)}</span>
                     <span class="wahlmodul-ects">${module.ects || 0} ECTS</span>
                 </label>
             </div>
         `;
+          })
+          .join("");
+
+        return `
+          <section class="wahlmodul-category-section" data-category="${this.escapeHtml(category)}">
+            <div class="wahlmodul-category-title">${this.escapeHtml(category)}</div>
+            <div class="wahlmodul-category-items">${itemsHtml}</div>
+          </section>
+        `;
       })
       .join("");
+  },
+
+  groupModulesByCategory(modules) {
+    const grouped = [];
+    const categoryMap = new Map();
+
+    modules.forEach((module) => {
+      const category = module.standardcategory || "Ohne Kategorie";
+      if (!categoryMap.has(category)) {
+        categoryMap.set(category, []);
+        grouped.push({ category, modules: categoryMap.get(category) });
+      }
+      categoryMap.get(category).push(module);
+    });
+
+    return grouped;
+  },
+
+  escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   },
 
   // Fügt Event Listener zum Dialog hinzu
@@ -228,12 +283,24 @@ window.StudienplanWahlmodule = {
     // Such-Funktion
     searchInput.addEventListener("input", (e) => {
       const searchTerm = e.target.value.toLowerCase();
+      const sections = overlay.querySelectorAll(".wahlmodul-category-section");
       const items = overlay.querySelectorAll(".wahlmodul-item");
       items.forEach((item) => {
         const name = item
           .querySelector(".wahlmodul-name")
           .textContent.toLowerCase();
-        item.style.display = name.includes(searchTerm) ? "flex" : "none";
+        const category = (item.dataset.category || "").toLowerCase();
+        item.style.display =
+          name.includes(searchTerm) || category.includes(searchTerm)
+            ? "flex"
+            : "none";
+      });
+
+      sections.forEach((section) => {
+        const visibleItems = section.querySelectorAll(
+          ".wahlmodul-item[style*='flex']",
+        );
+        section.style.display = visibleItems.length > 0 ? "block" : "none";
       });
     });
 
@@ -253,8 +320,6 @@ window.StudienplanWahlmodule = {
 
   // Fügt ausgewählte Module zum Studienplan hinzu
   addSelectedModules(selectedModules, placeholderElement) {
-    const container = placeholderElement.parentElement;
-
     // Finde oder erstelle den Container für die ausgewählten Module
     let selectedContainer = placeholderElement.nextElementSibling;
     if (

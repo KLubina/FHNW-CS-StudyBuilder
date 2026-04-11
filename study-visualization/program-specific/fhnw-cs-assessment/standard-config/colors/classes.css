@@ -13,6 +13,12 @@
   color: var(--color-vertiefung-text, white);
 }
 
+[data-studiengang="fhnw-cs-assessment"] .modul.systeme,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.systeme {
+  background-color: var(--color-systeme);
+  color: var(--color-systeme-text, white);
+}
+
 [data-studiengang="fhnw-cs-assessment"] .modul.projekt,
 [data-studiengang="fhnw-cs-assessment"] .legende-item.projekt {
   background-color: var(--color-projekt);

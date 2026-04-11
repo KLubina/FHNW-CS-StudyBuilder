@@ -48,6 +48,14 @@ window.StudienplanConfigLoader = {
       const dataPath = `../program-specific/${studiengang}/data/basic-modules-data.js`;
       await this.loadScript(dataPath);
 
+      // Lade Wahlmodul-Sektionen falls vorhanden
+      const wahlmoduleSectionsPath = `../program-specific/${studiengang}/data/wahlmodule-sections.js`;
+      try {
+        await this.loadScript(wahlmoduleSectionsPath);
+      } catch (e) {
+        // Optional
+      }
+
       // Major-Minor Legacy Handling:
       // Check if global variable for modules is set after loading.
       // Major-Minor files might define variables ending in 'PflichtmoduleData'.

@@ -160,7 +160,10 @@ window.StudienplanModule = {
     let wahlmodulSourceAttr = "";
     if (isWahlmodulPlaceholder) {
       placeholderClass = "modul-platzhalter";
-      wahlmodulSourceAttr = `data-wahlmodul-source="${module.wahlmodulSource}"`;
+      wahlmodulSourceAttr = `data-wahlmodul-source="${this.escapeAttribute(module.wahlmodulSource)}"`;
+      if (module.wahlmodulCategory) {
+        wahlmodulSourceAttr += ` data-wahlmodul-category="${this.escapeAttribute(module.wahlmodulCategory)}"`;
+      }
     }
 
     const materialButtons = this.renderMaterialButtons(name);
