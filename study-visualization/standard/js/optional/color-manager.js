@@ -6,28 +6,40 @@ window.StudienplanColorManager = {
   currentMode: "standard",
 
   initialize() {
-    // Wenn bereits erfolgreich initialisiert, nichts tun
-    if (this._initialized) return;
-
     // Versuche, den Selector zu erstellen; wenn keine Modi definiert sind,
     // gibt createColorModeSelector false zurück und wir markieren nicht als init.
     // Erfasse die ursprünglichen Klassen der Module, damit wir später zu 'standard' zurückkehren können
     this.captureOriginalModuleClasses();
 
+    const storedMode = this.getStoredModeKey();
+    const defaultMode = this.getDefaultModeKey();
+    const initialMode =
+      storedMode &&
+      (storedMode === "standard" ||
+        window.StudiengangColorManagerModes?.[storedMode])
+        ? storedMode
+        : defaultMode;
+
+    this.currentMode = initialMode;
+
     const created = this.createColorModeSelector();
 
-    // Setze konfigurierbaren Default-Mode
-    const defaultMode = this.getDefaultModeKey();
-    this.currentMode = defaultMode;
-    this.setMode(defaultMode);
+    this.setMode(initialMode);
 
-    if (created) {
-      this._initialized = true;
-    }
+    return created;
   },
 
   createColorModeSelector() {
     if (!window.StudiengangColorManagerModes) return false;
+
+    const existingSelector = document.getElementById("color-mode-selector");
+    if (existingSelector) {
+      const select = existingSelector.querySelector("#color-mode-select");
+      if (select) {
+        select.value = this.currentMode || this.getDefaultModeKey();
+      }
+      return false;
+    }
 
     const customModeKeys = Object.keys(window.StudiengangColorManagerModes);
     if (customModeKeys.length === 0) return false;
@@ -67,8 +79,8 @@ window.StudienplanColorManager = {
       select.appendChild(option);
     });
 
-    const defaultMode = this.getDefaultModeKey();
-    select.value = defaultMode;
+    const initialMode = this.currentMode || this.getDefaultModeKey();
+    select.value = initialMode;
 
     // Event listener
     select.addEventListener("change", (e) => {
@@ -115,6 +127,8 @@ window.StudienplanColorManager = {
     this.currentMode = modeKey;
 
     if (modeKey === "standard") {
+      this.saveModeKey(modeKey);
+
       // Entferne vorherige color management CSS
       const existing = document.querySelectorAll("link[data-color-mode]");
       existing.forEach((link) => link.remove());
@@ -136,11 +150,14 @@ window.StudienplanColorManager = {
 
       // Aktualisiere Legende
       this.updateLegend("standard");
+      this.syncSelectorValue(modeKey);
       return;
     }
 
     const mode = window.StudiengangColorManagerModes[modeKey];
     if (!mode) return;
+
+    this.saveModeKey(modeKey);
 
     // Lade die CSS für den Modus
     this.loadModeCSS(mode);
@@ -150,6 +167,36 @@ window.StudienplanColorManager = {
 
     // Update die Legende
     this.updateLegend(modeKey);
+    this.syncSelectorValue(modeKey);
+  },
+
+  syncSelectorValue(modeKey) {
+    const select = document.getElementById("color-mode-select");
+    if (select && select.value !== modeKey) {
+      select.value = modeKey;
+    }
+  },
+
+  getStorageKey() {
+    return ["studienplan", this.getCurrentStudiengang(), "color-mode"]
+      .map((part) => encodeURIComponent(String(part || "")))
+      .join(":");
+  },
+
+  getStoredModeKey() {
+    try {
+      return window.localStorage.getItem(this.getStorageKey());
+    } catch (error) {
+      return null;
+    }
+  },
+
+  saveModeKey(modeKey) {
+    try {
+      window.localStorage.setItem(this.getStorageKey(), modeKey);
+    } catch (error) {
+      console.warn("Konnte Farbmodus nicht lokal speichern:", error);
+    }
   },
 
   loadModeCSS(mode) {
@@ -176,6 +223,8 @@ window.StudienplanColorManager = {
   captureOriginalModuleClasses() {
     const modules = document.querySelectorAll(".modul");
     modules.forEach((modul) => {
+      if (modul.dataset.originalClasses) return;
+
       const orig = Array.from(modul.classList)
         .filter((c) => c !== "modul")
         .join(" ");
@@ -245,7 +294,8 @@ window.StudienplanColorManager = {
 
     if (modeKey === "standard") {
       const standardMode = this.getStandardModeConfig();
-      if (legendTitle) legendTitle.textContent = `${standardMode.label}-Legende`;
+      if (legendTitle)
+        legendTitle.textContent = `${standardMode.label}-Legende`;
       // Verwende die standard Kategorien
       const modules = document.querySelectorAll(".modul");
       const cats = new Set();

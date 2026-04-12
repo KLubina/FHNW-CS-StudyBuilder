@@ -160,19 +160,28 @@ window.StudienplanConfigLoader = {
     // Initialisiere optionale Module, falls vorhanden (z.B. wenn sie nach DOMContentLoaded geladen wurden)
     try {
       if (
-        window.StudienplanKPCounter &&
-        typeof window.StudienplanKPCounter.updateTotalKP === "function"
-      ) {
-        // KP Counter aktualisieren (berechnet aus gerenderten Modulen)
-        window.StudienplanKPCounter.updateTotalKP();
-      }
-
-      if (
         window.StudienplanColorManager &&
         typeof window.StudienplanColorManager.initialize === "function"
       ) {
         // Color Manager initialisieren (erzeugt Selector / Legendeneinträge)
         window.StudienplanColorManager.initialize();
+      }
+
+      if (
+        window.StudienplanWahlmodule &&
+        typeof window.StudienplanWahlmodule.restorePersistedSelections ===
+          "function"
+      ) {
+        // Gespeicherte Wahlmodule nach dem Rendern wiederherstellen
+        window.StudienplanWahlmodule.restorePersistedSelections();
+      }
+
+      if (
+        window.StudienplanKPCounter &&
+        typeof window.StudienplanKPCounter.updateTotalKP === "function"
+      ) {
+        // KP Counter aktualisieren (berechnet aus gerenderten Modulen)
+        window.StudienplanKPCounter.updateTotalKP();
       }
     } catch (e) {
       console.warn("Fehler beim Initialisieren optionaler Module:", e);

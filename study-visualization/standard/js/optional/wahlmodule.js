@@ -5,6 +5,65 @@
 window.StudienplanWahlmodule = {
   loadedSources: {}, // Cache für geladene Modul-Daten
 
+  getCurrentStudiengang() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("studiengang") || "eth-cs";
+  },
+
+  getStorageKey(source, category = "") {
+    return [
+      "studienplan",
+      this.getCurrentStudiengang(),
+      "wahlmodule",
+      source,
+      category || "all",
+    ]
+      .map((part) => encodeURIComponent(String(part || "")))
+      .join(":");
+  },
+
+  loadPersistedSelection(source, category = "") {
+    try {
+      const raw = window.localStorage.getItem(
+        this.getStorageKey(source, category),
+      );
+      if (!raw) return [];
+
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  },
+
+  savePersistedSelection(source, category, selectedModules) {
+    try {
+      window.localStorage.setItem(
+        this.getStorageKey(source, category),
+        JSON.stringify(selectedModules),
+      );
+    } catch (error) {
+      console.warn("Konnte Wahlmodule nicht lokal speichern:", error);
+    }
+  },
+
+  restorePersistedSelections() {
+    const placeholders = document.querySelectorAll(
+      ".modul[data-wahlmodul-source]",
+    );
+
+    placeholders.forEach((placeholderElement) => {
+      const source = placeholderElement.getAttribute("data-wahlmodul-source");
+      const category =
+        placeholderElement.getAttribute("data-wahlmodul-category") || "";
+      const storedSelection = this.loadPersistedSelection(source, category);
+
+      if (storedSelection.length > 0) {
+        this.addSelectedModules(storedSelection, placeholderElement, false);
+      }
+    });
+  },
+
   initialize() {
     // Klick-Listener für Platzhalter-Module
     document.addEventListener("click", (e) => {
@@ -355,7 +414,11 @@ window.StudienplanWahlmodule = {
   },
 
   // Fügt ausgewählte Module zum Studienplan hinzu
-  addSelectedModules(selectedModules, placeholderElement) {
+  addSelectedModules(
+    selectedModules,
+    placeholderElement,
+    shouldPersist = true,
+  ) {
     // Finde oder erstelle den Container für die ausgewählten Module
     let selectedContainer = placeholderElement.nextElementSibling;
     if (
@@ -377,6 +440,13 @@ window.StudienplanWahlmodule = {
     placeholderElement.dataset.selectedModules =
       JSON.stringify(selectedModules);
 
+    if (shouldPersist) {
+      const source = placeholderElement.getAttribute("data-wahlmodul-source");
+      const category =
+        placeholderElement.getAttribute("data-wahlmodul-category") || "";
+      this.savePersistedSelection(source, category, selectedModules);
+    }
+
     // Füge ausgewählte Module hinzu
     selectedModules.forEach((module) => {
       const moduleForRender = {
@@ -393,6 +463,15 @@ window.StudienplanWahlmodule = {
     // Aktualisiere KP-Counter falls vorhanden
     if (window.StudienplanKPCounter) {
       window.StudienplanKPCounter.updateCounter();
+    }
+
+    if (
+      window.StudienplanColorManager &&
+      typeof window.StudienplanColorManager.setMode === "function"
+    ) {
+      window.StudienplanColorManager.setMode(
+        window.StudienplanColorManager.currentMode || "standard",
+      );
     }
 
     console.log(
