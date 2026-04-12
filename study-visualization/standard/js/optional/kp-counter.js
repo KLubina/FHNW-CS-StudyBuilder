@@ -50,6 +50,30 @@ window.StudienplanKPCounter = {
     if (counterBox) {
       counterBox.innerHTML = `<div id="kp-total">Gesamt: <strong>${total} KP</strong> (mind. 180 KP erforderlich)</div>`;
     }
+
+    this.updateSemesterCounters();
+  },
+
+  updateSemesterCounters() {
+    const semesterElements = document.querySelectorAll(".semester");
+
+    semesterElements.forEach((semesterElement) => {
+      const counterElement = semesterElement.querySelector(
+        ".semester-ects-counter",
+      );
+      if (!counterElement) return;
+
+      const semesterModules = semesterElement.querySelectorAll(
+        ".module-container .modul:not(.module-kp-exempt)",
+      );
+
+      let semesterTotal = 0;
+      semesterModules.forEach((module) => {
+        semesterTotal += parseInt(module.dataset.ects, 10) || 0;
+      });
+
+      counterElement.textContent = `${semesterTotal} ECTS`;
+    });
   },
 
   // Alias-Methode für Abwärtskompatibilität (anderes Modul ruft updateCounter())

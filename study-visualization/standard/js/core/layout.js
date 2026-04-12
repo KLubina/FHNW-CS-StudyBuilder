@@ -199,7 +199,10 @@ window.StudienplanLayout = {
 
     return `
             <div class="semester" data-year="${year}" data-semester="${semester}">
-                <h4 class="semester-title">${semesterName}</h4>
+          <div class="semester-title-row">
+            <h4 class="semester-title">${semesterName}</h4>
+            <span class="semester-ects-counter">0 ECTS</span>
+          </div>
                 <div class="module-container">
                     ${modulesHTML}
                 </div>

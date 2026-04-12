@@ -41,6 +41,24 @@
   gap: var(--spacing-sm);
 }
 
+.semester-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.semester-ects-counter {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
 .semester.is-empty-semester {
   display: none;
 }
@@ -138,5 +156,9 @@
 
   .modul {
     margin: 2px;
+  }
+
+  .semester-title-row {
+    align-items: center;
   }
 }
