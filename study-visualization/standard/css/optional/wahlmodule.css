@@ -318,6 +318,118 @@
   border-top: 1px solid #e0e0e0;
 }
 
+.wahlmodul-selected-empty {
+  font-size: 0.92rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.wahlmodul-assignment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 1 260px;
+  max-width: 100%;
+}
+
+.wahlmodul-assignment-card .modul {
+  flex: 0 0 auto;
+}
+
+.wahlmodul-assignment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.wahlmodul-assignment-semester {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eaf3ff;
+  color: #1d4ed8;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.wahlmodul-assignment-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wahlmodul-semester-select-wrapper {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wahlmodul-semester-select-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.wahlmodul-semester-select {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid #dbe4f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.86rem;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.wahlmodul-semester-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.16);
+}
+
+.wahlmodul-assignment-card .wahlmodul-assignment-buttons {
+  margin-top: 2px;
+}
+
+.wahlmodul-assignment-button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #4a90e2;
+  color: white;
+  transition: all 0.2s;
+}
+
+.wahlmodul-assignment-button:hover {
+  background: #3a7bc8;
+  transform: translateY(-1px);
+}
+
+.wahlmodul-assignment-button.is-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.wahlmodul-assignment-button.is-secondary:hover {
+  background: #d1d5db;
+  color: #111827;
+}
+
+.is-plan-card {
+  flex: 0 1 220px;
+}
+
 .wahlmodule-bereich {
   margin-top: 28px;
   padding: 24px 0 8px;
@@ -493,6 +605,10 @@
   .wahlmodul-cancel,
   .wahlmodul-confirm {
     width: 100%;
+  }
+
+  .wahlmodul-semester-select {
+    min-height: 36px;
   }
 
   .projekte-module-row {

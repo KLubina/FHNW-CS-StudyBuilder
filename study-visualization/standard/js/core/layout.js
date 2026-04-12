@@ -8,11 +8,13 @@ window.StudienplanLayout = {
     const container = document.getElementById("studienplan");
     if (!container) return;
 
-    const years = Object.keys(groupedModules).sort((a, b) => a - b);
+    const years = Array.from({ length: 6 }, (_, index) => index + 1);
     const layoutHTML =
-      years
-        .map((year) => this.renderYear(year, groupedModules[year]))
-        .join("") +
+      `
+        <div class="studienplan-hauptbereich">
+          ${years.map((year) => this.renderYear(year, groupedModules[year] || {})).join("")}
+        </div>
+      ` +
       this.renderWahlmoduleSections() +
       this.renderVertiefungenSections() +
       this.renderContextSections() +
@@ -174,10 +176,10 @@ window.StudienplanLayout = {
 
   // Rendere ein Jahr
   renderYear(year, semesters) {
-    const semesterKeys = Object.keys(semesters).sort((a, b) => a - b);
+    const semesterKeys = [1, 2];
     const yearHTML = semesterKeys
       .map((semester) =>
-        this.renderSemester(year, semester, semesters[semester]),
+        this.renderSemester(year, semester, semesters[semester] || []),
       )
       .join("");
 

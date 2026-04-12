@@ -30,7 +30,7 @@ window.StudienplanWahlmodule = {
       if (!raw) return [];
 
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      return this.normalizeAssignments(parsed);
     } catch (error) {
       return [];
     }
@@ -47,7 +47,194 @@ window.StudienplanWahlmodule = {
     }
   },
 
-  restorePersistedSelections() {
+  createAssignmentId() {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
+    return `assignment-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  },
+
+  normalizeSemester(semester) {
+    const numberValue = Number(semester);
+    if (!Number.isInteger(numberValue) || numberValue < 1 || numberValue > 12) {
+      return null;
+    }
+
+    return numberValue;
+  },
+
+  getModuleIdentity(module) {
+    const identityParts = [
+      module?.name,
+      module?.ects,
+      module?.standardcategory,
+      module?.subcategory,
+    ];
+
+    return identityParts
+      .map((part) =>
+        String(part ?? "")
+          .trim()
+          .toLowerCase(),
+      )
+      .join("|");
+  },
+
+  normalizeAssignment(entry) {
+    if (!entry) return null;
+
+    const module = entry.module || entry;
+    if (!module || !module.name) return null;
+
+    return {
+      id: entry.id || this.createAssignmentId(),
+      semester: this.normalizeSemester(entry.semester),
+      module: { ...module },
+    };
+  },
+
+  normalizeAssignments(entries) {
+    if (!Array.isArray(entries)) return [];
+
+    return entries
+      .map((entry) => this.normalizeAssignment(entry))
+      .filter(Boolean);
+  },
+
+  mergeAssignments(existingAssignments, selectedModules) {
+    const existingMap = new Map(
+      existingAssignments.map((assignment) => [
+        this.getModuleIdentity(assignment.module),
+        assignment,
+      ]),
+    );
+
+    return selectedModules
+      .map((moduleEntry) => {
+        const module = moduleEntry?.module || moduleEntry;
+        if (!module) return null;
+
+        const existingAssignment = existingMap.get(
+          this.getModuleIdentity(module),
+        );
+
+        return {
+          id:
+            moduleEntry?.id ||
+            existingAssignment?.id ||
+            this.createAssignmentId(),
+          semester: this.normalizeSemester(
+            moduleEntry?.semester ?? existingAssignment?.semester,
+          ),
+          module: { ...module },
+        };
+      })
+      .filter(Boolean);
+  },
+
+  getPersistedAssignments(source, category = "") {
+    return this.normalizeAssignments(
+      this.loadPersistedSelection(source, category),
+    );
+  },
+
+  renderSelectedModulesPanel(placeholderElement, assignments) {
+    const source = placeholderElement.getAttribute("data-wahlmodul-source");
+    const category =
+      placeholderElement.getAttribute("data-wahlmodul-category") || "";
+    let selectedContainer = placeholderElement.nextElementSibling;
+    if (
+      !selectedContainer ||
+      !selectedContainer.classList.contains("wahlmodul-selected-container")
+    ) {
+      selectedContainer = document.createElement("div");
+      selectedContainer.className = "wahlmodul-selected-container";
+      placeholderElement.parentElement.insertBefore(
+        selectedContainer,
+        placeholderElement.nextElementSibling,
+      );
+    }
+
+    selectedContainer.innerHTML = "";
+
+    if (assignments.length === 0) {
+      selectedContainer.innerHTML = `
+        <div class="wahlmodul-selected-empty">
+          Noch keine Wahlmodule ausgewählt.
+        </div>
+      `;
+      return;
+    }
+
+    assignments.forEach((assignment) => {
+      const card = this.renderAssignmentCard(
+        assignment,
+        "selection",
+        source,
+        category,
+      );
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = card;
+      const moduleElement = tempDiv.querySelector(".modul");
+      if (moduleElement) {
+        moduleElement.classList.add("module-kp-exempt");
+      }
+      selectedContainer.appendChild(tempDiv.firstElementChild);
+    });
+  },
+
+  renderAssignmentCard(
+    assignment,
+    mode = "selection",
+    source = "",
+    category = "",
+  ) {
+    const moduleForRender = {
+      ...assignment.module,
+      standardcategory: this.resolveCategoryClass(
+        assignment.module.standardcategory,
+      ),
+    };
+    const semesterLabel =
+      assignment.semester == null
+        ? "Noch nicht zugewiesen"
+        : `Semester ${assignment.semester}`;
+    const selectId = `semester-select-${assignment.id}`;
+    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
+      const semesterNumber = index + 1;
+      const selectedAttr =
+        assignment.semester === semesterNumber ? "selected" : "";
+      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
+    }).join("");
+
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+
+    return `
+      <div class="wahlmodul-assignment-card ${mode === "plan" ? "is-plan-card" : "is-selection-card"}" data-assignment-id="${this.escapeHtml(assignment.id)}" data-assignment-semester="${assignment.semester == null ? "" : assignment.semester}" data-wahlmodul-source="${this.escapeHtml(source)}" data-wahlmodul-category="${this.escapeHtml(category)}">
+        ${moduleHTML}
+        <div class="wahlmodul-assignment-actions">
+          <div class="wahlmodul-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
+          <div class="wahlmodul-semester-select-wrapper">
+            <label class="wahlmodul-semester-select-label" for="${this.escapeHtml(selectId)}">Semester zuweisen</label>
+            <select
+              id="${this.escapeHtml(selectId)}"
+              class="wahlmodul-semester-select"
+              data-action="assign-semester-select"
+            >
+              <option value="">Nicht zugewiesen</option>
+              ${semesterOptions}
+            </select>
+          </div>
+          <div class="wahlmodul-assignment-buttons">
+            <button type="button" class="wahlmodul-assignment-button is-secondary" data-action="remove-assignment">Entfernen</button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  refreshWahlmoduleViews() {
     const placeholders = document.querySelectorAll(
       ".modul[data-wahlmodul-source]",
     );
@@ -56,12 +243,95 @@ window.StudienplanWahlmodule = {
       const source = placeholderElement.getAttribute("data-wahlmodul-source");
       const category =
         placeholderElement.getAttribute("data-wahlmodul-category") || "";
-      const storedSelection = this.loadPersistedSelection(source, category);
+      const assignments = this.getPersistedAssignments(source, category);
 
-      if (storedSelection.length > 0) {
-        this.addSelectedModules(storedSelection, placeholderElement, false);
-      }
+      placeholderElement.dataset.selectedModules = JSON.stringify(assignments);
+      this.renderSelectedModulesPanel(placeholderElement, assignments);
     });
+
+    this.renderStudyPlanAssignments();
+
+    if (window.StudienplanKPCounter) {
+      window.StudienplanKPCounter.updateCounter();
+    }
+  },
+
+  renderStudyPlanAssignments() {
+    document
+      .querySelectorAll(".module-container .studyplan-assigned-module")
+      .forEach((moduleElement) => moduleElement.remove());
+
+    const placeholders = document.querySelectorAll(
+      ".modul[data-wahlmodul-source]",
+    );
+
+    placeholders.forEach((placeholderElement) => {
+      const source = placeholderElement.getAttribute("data-wahlmodul-source");
+      const category =
+        placeholderElement.getAttribute("data-wahlmodul-category") || "";
+      const assignments = this.getPersistedAssignments(source, category);
+
+      assignments.forEach((assignment) => {
+        if (!assignment.semester) return;
+        const year = Math.ceil(assignment.semester / 2);
+        const semesterInYear = assignment.semester % 2 === 1 ? 1 : 2;
+        const semesterContainer = document.querySelector(
+          `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+        );
+
+        if (!semesterContainer) return;
+
+        const moduleForRender = {
+          ...assignment.module,
+          standardcategory: this.resolveCategoryClass(
+            assignment.module.standardcategory,
+          ),
+        };
+
+        const moduleHTML =
+          window.StudienplanModule.renderModule(moduleForRender);
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = moduleHTML;
+        const moduleElement = tempDiv.firstElementChild;
+        if (!moduleElement) return;
+
+        moduleElement.classList.add("studyplan-assigned-module");
+        semesterContainer.appendChild(moduleElement);
+      });
+    });
+  },
+
+  findAssignment(source, category, assignmentId) {
+    const assignments = this.getPersistedAssignments(source, category);
+    return (
+      assignments.find((assignment) => assignment.id === assignmentId) || null
+    );
+  },
+
+  updateAssignmentSemester(source, category, assignmentId, semester) {
+    const assignments = this.getPersistedAssignments(source, category);
+    const updatedAssignments = assignments.map((assignment) =>
+      assignment.id === assignmentId
+        ? { ...assignment, semester: this.normalizeSemester(semester) }
+        : assignment,
+    );
+
+    this.savePersistedSelection(source, category, updatedAssignments);
+    this.refreshWahlmoduleViews();
+  },
+
+  removeAssignment(source, category, assignmentId) {
+    const assignments = this.getPersistedAssignments(source, category);
+    const updatedAssignments = assignments.filter(
+      (assignment) => assignment.id !== assignmentId,
+    );
+
+    this.savePersistedSelection(source, category, updatedAssignments);
+    this.refreshWahlmoduleViews();
+  },
+
+  restorePersistedSelections() {
+    this.refreshWahlmoduleViews();
   },
 
   initialize() {
@@ -83,6 +353,49 @@ window.StudienplanWahlmodule = {
       }
     });
 
+    document.addEventListener("change", (e) => {
+      const assignSelect = e.target.closest(
+        "select[data-action='assign-semester-select']",
+      );
+      if (!assignSelect) return;
+
+      const assignmentCard = assignSelect.closest(".wahlmodul-assignment-card");
+      if (!assignmentCard) return;
+
+      const source = assignmentCard.getAttribute("data-wahlmodul-source");
+      const category =
+        assignmentCard.getAttribute("data-wahlmodul-category") || "";
+      const assignmentId = assignmentCard.getAttribute("data-assignment-id");
+      const selectedValue = assignSelect.value;
+      const semester = selectedValue ? Number(selectedValue) : null;
+      this.updateAssignmentSemester(source, category, assignmentId, semester);
+    });
+
+    document.addEventListener("click", (e) => {
+      const removeButton = e.target.closest(
+        "[data-action='remove-assignment']",
+      );
+      const assignmentCard = e.target.closest(".wahlmodul-assignment-card");
+
+      if (!assignmentCard) return;
+      if (e.target.closest("a")) return;
+
+      const source = assignmentCard.getAttribute("data-wahlmodul-source");
+      const category =
+        assignmentCard.getAttribute("data-wahlmodul-category") || "";
+      const assignmentId = assignmentCard.getAttribute("data-assignment-id");
+      const assignment = this.findAssignment(source, category, assignmentId);
+
+      if (!assignment) return;
+
+      if (removeButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.removeAssignment(source, category, assignmentId);
+        return;
+      }
+    });
+
     // Check ob Platzhalter vorhanden sind
     setTimeout(() => {
       const platzhalter = document.querySelectorAll(
@@ -99,6 +412,13 @@ window.StudienplanWahlmodule = {
     try {
       // Lade Modul-Daten
       const modules = await this.loadWahlmodulData(source);
+      const currentAssignments = this.getPersistedAssignments(
+        source,
+        categoryFilter || "",
+      );
+      const selectedModules = currentAssignments.map(
+        (assignment) => assignment.module,
+      );
       const filteredModules = categoryFilter
         ? modules.filter(
             (module) =>
@@ -117,6 +437,7 @@ window.StudienplanWahlmodule = {
         filteredModules,
         modulElement,
         categoryFilter,
+        selectedModules,
       );
     } catch (error) {
       console.error("Fehler beim Laden der Wahlmodule:", error);
@@ -199,18 +520,15 @@ window.StudienplanWahlmodule = {
   },
 
   // Zeigt den Auswahl-Dialog an
-  showModulSelectionDialog(modules, placeholderElement, categoryFilter = null) {
-    // Hole bereits ausgewählte Module aus dem Platzhalter
-    let selectedModules = [];
-    if (placeholderElement.dataset.selectedModules) {
-      try {
-        selectedModules = JSON.parse(
-          placeholderElement.dataset.selectedModules,
-        );
-      } catch (e) {
-        selectedModules = [];
-      }
-    }
+  showModulSelectionDialog(
+    modules,
+    placeholderElement,
+    categoryFilter = null,
+    selectedModules = [],
+  ) {
+    const normalizedSelectedModules = Array.isArray(selectedModules)
+      ? selectedModules
+      : [];
 
     // Erstelle Modal-Overlay
     const overlay = document.createElement("div");
@@ -226,7 +544,7 @@ window.StudienplanWahlmodule = {
                         <input type="text" id="wahlmodul-search" placeholder="Module durchsuchen...">
                     </div>
                     <div class="wahlmodul-list" id="wahlmodul-list">
-                        ${this.renderModulList(modules, selectedModules)}
+                      ${this.renderModulList(modules, normalizedSelectedModules)}
                     </div>
                 </div>
                 <div class="wahlmodul-footer">
@@ -249,6 +567,9 @@ window.StudienplanWahlmodule = {
   // Rendert die Modulliste
   renderModulList(modules, selectedModules = []) {
     const groupedModules = this.groupModulesByCategory(modules);
+    const selectedIdentitySet = new Set(
+      selectedModules.map((module) => this.getModuleIdentity(module)),
+    );
     let index = 0;
 
     return groupedModules
@@ -256,8 +577,8 @@ window.StudienplanWahlmodule = {
         const itemsHtml = categoryModules
           .map((module) => {
             const currentIndex = index++;
-            const isSelected = selectedModules.some(
-              (m) => m.name === module.name && m.ects === module.ects,
+            const isSelected = selectedIdentitySet.has(
+              this.getModuleIdentity(module),
             );
             const checkedAttr = isSelected ? "checked" : "";
 
@@ -419,46 +740,25 @@ window.StudienplanWahlmodule = {
     placeholderElement,
     shouldPersist = true,
   ) {
-    // Finde oder erstelle den Container für die ausgewählten Module
-    let selectedContainer = placeholderElement.nextElementSibling;
-    if (
-      !selectedContainer ||
-      !selectedContainer.classList.contains("wahlmodul-selected-container")
-    ) {
-      selectedContainer = document.createElement("div");
-      selectedContainer.className = "wahlmodul-selected-container";
-      placeholderElement.parentElement.insertBefore(
-        selectedContainer,
-        placeholderElement.nextElementSibling,
-      );
-    }
-
-    // Leere den Container
-    selectedContainer.innerHTML = "";
-
-    // Speichere die Auswahl im Platzhalter für spätere Bearbeitung
-    placeholderElement.dataset.selectedModules =
-      JSON.stringify(selectedModules);
+    const source = placeholderElement.getAttribute("data-wahlmodul-source");
+    const category =
+      placeholderElement.getAttribute("data-wahlmodul-category") || "";
+    const existingAssignments = this.getPersistedAssignments(source, category);
+    const normalizedAssignments = this.mergeAssignments(
+      existingAssignments,
+      selectedModules,
+    );
 
     if (shouldPersist) {
-      const source = placeholderElement.getAttribute("data-wahlmodul-source");
-      const category =
-        placeholderElement.getAttribute("data-wahlmodul-category") || "";
-      this.savePersistedSelection(source, category, selectedModules);
+      this.savePersistedSelection(source, category, normalizedAssignments);
     }
 
-    // Füge ausgewählte Module hinzu
-    selectedModules.forEach((module) => {
-      const moduleForRender = {
-        ...module,
-        standardcategory: this.resolveCategoryClass(module.standardcategory),
-      };
-      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = moduleHTML;
-      const moduleElement = tempDiv.firstElementChild;
-      selectedContainer.appendChild(moduleElement);
-    });
+    placeholderElement.dataset.selectedModules = JSON.stringify(
+      normalizedAssignments,
+    );
+
+    this.renderSelectedModulesPanel(placeholderElement, normalizedAssignments);
+    this.renderStudyPlanAssignments();
 
     // Aktualisiere KP-Counter falls vorhanden
     if (window.StudienplanKPCounter) {
