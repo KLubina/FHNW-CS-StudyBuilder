@@ -41,6 +41,14 @@
   gap: var(--spacing-sm);
 }
 
+.semester.is-empty-semester {
+  display: none;
+}
+
+.jahr.is-empty-year {
+  display: none;
+}
+
 /* Module Container - Default Flexbox Layout */
 .module-container {
   display: flex !important;

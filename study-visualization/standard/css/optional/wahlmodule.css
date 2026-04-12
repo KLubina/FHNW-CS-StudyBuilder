@@ -513,6 +513,66 @@
   flex: 0 0 auto;
 }
 
+.projekt-assignment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 0 1 260px;
+  max-width: 100%;
+}
+
+.projekt-assignment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.projekt-assignment-semester {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eaf3ff;
+  color: #1d4ed8;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.projekt-semester-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.projekt-semester-select-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.projekt-semester-select {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid #dbe4f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.86rem;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.projekt-semester-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.16);
+}
+
 .vertiefungen-bereich {
   margin-top: 32px;
   padding-top: 24px;

@@ -47,6 +47,123 @@ window.StudienplanWahlmodule = {
     }
   },
 
+  getProjectStorageKey() {
+    return [
+      "studienplan",
+      this.getCurrentStudiengang(),
+      "projects",
+      "assignments",
+    ]
+      .map((part) => encodeURIComponent(String(part || "")))
+      .join(":");
+  },
+
+  loadPersistedProjectAssignments() {
+    try {
+      const raw = window.localStorage.getItem(this.getProjectStorageKey());
+      if (!raw) return {};
+
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return {};
+
+      const normalized = {};
+      Object.keys(parsed).forEach((projectName) => {
+        normalized[projectName] = this.normalizeSemester(parsed[projectName]);
+      });
+
+      return normalized;
+    } catch (error) {
+      return {};
+    }
+  },
+
+  savePersistedProjectAssignments(assignments) {
+    try {
+      window.localStorage.setItem(
+        this.getProjectStorageKey(),
+        JSON.stringify(assignments || {}),
+      );
+    } catch (error) {
+      console.warn("Konnte Projektzuweisungen nicht speichern:", error);
+    }
+  },
+
+  getProjectModules() {
+    return (
+      window.FHNWCSAssessmentProjectModules ||
+      window.StudiengangProjectModules ||
+      []
+    );
+  },
+
+  renderProjectAssignmentCard(module, assignedSemester) {
+    const moduleForRender = {
+      ...module,
+      standardcategory: this.resolveCategoryClass(module.standardcategory),
+    };
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+    const selectId = `project-semester-${this.escapeHtml(module.name)}`;
+    const semesterLabel =
+      assignedSemester == null
+        ? "Noch nicht zugewiesen"
+        : `Semester ${assignedSemester}`;
+    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
+      const semesterNumber = index + 1;
+      const selectedAttr =
+        assignedSemester === semesterNumber ? "selected" : "";
+      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
+    }).join("");
+
+    return `
+      <div class="projekt-assignment-card" data-project-name="${this.escapeHtml(module.name)}">
+        ${moduleHTML}
+        <div class="projekt-assignment-actions">
+          <div class="projekt-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
+          <div class="projekt-semester-select-wrapper">
+            <label class="projekt-semester-select-label" for="${selectId}">Semester zuweisen</label>
+            <select
+              id="${selectId}"
+              class="projekt-semester-select"
+              data-action="assign-project-semester"
+              data-project-name="${this.escapeHtml(module.name)}"
+            >
+              <option value="">Nicht zugewiesen</option>
+              ${semesterOptions}
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  refreshProjectAssignmentsPanel() {
+    const projectRow = document.querySelector(".projekte-module-row");
+    if (!projectRow) return;
+
+    const projectModules = this.getProjectModules();
+    if (!Array.isArray(projectModules) || projectModules.length === 0) {
+      projectRow.innerHTML = "";
+      return;
+    }
+
+    const projectAssignments = this.loadPersistedProjectAssignments();
+    projectRow.innerHTML = projectModules
+      .map((module) =>
+        this.renderProjectAssignmentCard(
+          module,
+          this.normalizeSemester(projectAssignments[module.name]),
+        ),
+      )
+      .join("");
+  },
+
+  updateProjectAssignment(projectName, semester) {
+    const assignments = this.loadPersistedProjectAssignments();
+    assignments[projectName] = this.normalizeSemester(semester);
+    this.savePersistedProjectAssignments(assignments);
+    this.refreshWahlmoduleViews();
+  },
+
   createAssignmentId() {
     if (window.crypto?.randomUUID) {
       return window.crypto.randomUUID();
@@ -249,11 +366,35 @@ window.StudienplanWahlmodule = {
       this.renderSelectedModulesPanel(placeholderElement, assignments);
     });
 
+    this.refreshProjectAssignmentsPanel();
+
     this.renderStudyPlanAssignments();
+    this.syncPlanVisibility();
 
     if (window.StudienplanKPCounter) {
       window.StudienplanKPCounter.updateCounter();
     }
+  },
+
+  syncPlanVisibility() {
+    const yearElements = document.querySelectorAll(".jahr");
+
+    yearElements.forEach((yearElement) => {
+      const semesterElements = yearElement.querySelectorAll(".semester");
+
+      semesterElements.forEach((semesterElement) => {
+        const moduleContainer =
+          semesterElement.querySelector(".module-container");
+        const hasModules = !!moduleContainer?.querySelector(".modul");
+        semesterElement.classList.toggle("is-empty-semester", !hasModules);
+      });
+
+      const hasVisibleSemester = Array.from(semesterElements).some(
+        (semesterElement) =>
+          !semesterElement.classList.contains("is-empty-semester"),
+      );
+      yearElement.classList.toggle("is-empty-year", !hasVisibleSemester);
+    });
   },
 
   renderStudyPlanAssignments() {
@@ -298,6 +439,40 @@ window.StudienplanWahlmodule = {
         moduleElement.classList.add("studyplan-assigned-module");
         semesterContainer.appendChild(moduleElement);
       });
+    });
+
+    const projectAssignments = this.loadPersistedProjectAssignments();
+    this.getProjectModules().forEach((projectModule) => {
+      const assignedSemester = this.normalizeSemester(
+        projectAssignments[projectModule.name],
+      );
+      if (!assignedSemester) return;
+
+      const year = Math.ceil(assignedSemester / 2);
+      const semesterInYear = assignedSemester % 2 === 1 ? 1 : 2;
+      const semesterContainer = document.querySelector(
+        `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+      );
+      if (!semesterContainer) return;
+
+      const moduleForRender = {
+        ...projectModule,
+        standardcategory: this.resolveCategoryClass(
+          projectModule.standardcategory,
+        ),
+      };
+      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = moduleHTML;
+      const moduleElement = tempDiv.firstElementChild;
+      if (!moduleElement) return;
+
+      moduleElement.classList.add(
+        "studyplan-assigned-module",
+        "project-assigned-module",
+        "module-kp-exempt",
+      );
+      semesterContainer.appendChild(moduleElement);
     });
   },
 
@@ -354,6 +529,18 @@ window.StudienplanWahlmodule = {
     });
 
     document.addEventListener("change", (e) => {
+      const projectAssignSelect = e.target.closest(
+        "select[data-action='assign-project-semester']",
+      );
+      if (projectAssignSelect) {
+        const projectName =
+          projectAssignSelect.getAttribute("data-project-name");
+        const selectedValue = projectAssignSelect.value;
+        const semester = selectedValue ? Number(selectedValue) : null;
+        this.updateProjectAssignment(projectName, semester);
+        return;
+      }
+
       const assignSelect = e.target.closest(
         "select[data-action='assign-semester-select']",
       );
