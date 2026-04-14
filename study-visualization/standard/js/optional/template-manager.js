@@ -16,8 +16,11 @@ window.StudienplanTemplateManager = {
   },
 
   getCurrentStudiengang() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("studiengang") || "eth-cs";
+    return (
+      document.body.getAttribute("data-studiengang") ||
+      new URLSearchParams(window.location.search).get("studiengang") ||
+      "fhnw-cs-assessment"
+    );
   },
 
   getStorageNamespace() {
@@ -472,6 +475,3 @@ if (document.readyState === "loading") {
 } else {
   window.StudienplanTemplateManager.initialize();
 }
-
-// Markiere als geladen
-window.subModulesReady["template-manager"] = Promise.resolve();

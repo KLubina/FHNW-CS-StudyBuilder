@@ -249,6 +249,3 @@ if (document.readyState === "loading") {
 } else {
   window.StudienplanTooltip.initialize();
 }
-
-// Markiere als geladen
-window.subModulesReady["tooltip"] = Promise.resolve();

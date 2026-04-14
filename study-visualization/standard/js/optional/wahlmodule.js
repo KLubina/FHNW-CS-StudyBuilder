@@ -6,8 +6,11 @@ window.StudienplanWahlmodule = {
   loadedSources: {}, // Cache für geladene Modul-Daten
 
   getCurrentStudiengang() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("studiengang") || "eth-cs";
+    return (
+      document.body.getAttribute("data-studiengang") ||
+      new URLSearchParams(window.location.search).get("studiengang") ||
+      "fhnw-cs-assessment"
+    );
   },
 
   getStorageKey(source, category = "") {
@@ -807,8 +810,7 @@ window.StudienplanWahlmodule = {
     }
 
     // Bestimme den Basis-Pfad (relativ zum aktuellen Studiengang)
-    const urlParams = new URLSearchParams(window.location.search);
-    const studiengang = urlParams.get("studiengang") || "eth-cs";
+    const studiengang = this.getCurrentStudiengang();
 
     // Konstruiere vollständigen Pfad
     const basePath = `../program-specific/${studiengang}/data/`;
@@ -1144,6 +1146,3 @@ if (document.readyState === "loading") {
   // DOM ist bereits ready, initialisiere sofort
   window.StudienplanWahlmodule.initialize();
 }
-
-// Markiere als geladen
-window.subModulesReady["wahlmodule"] = Promise.resolve();

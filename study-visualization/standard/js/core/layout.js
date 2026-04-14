@@ -233,6 +233,3 @@ window.StudienplanLayout = {
         `;
   },
 };
-
-// Markiere als geladen
-window.subModulesReady.layout = Promise.resolve();

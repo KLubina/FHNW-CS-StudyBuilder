@@ -133,6 +133,3 @@ if (
   // Kleiner Timeout, damit andere Module (z.B. Layout) zuerst ihre Arbeit beenden können
   setTimeout(() => window.StudienplanKPCounter.initialize(), 0);
 }
-
-// Markiere als geladen
-window.subModulesReady["kp-counter"] = Promise.resolve();

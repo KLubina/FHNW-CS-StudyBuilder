@@ -113,28 +113,17 @@ window.StudienplanConfigLoader = {
     }
   },
 
-  // Lade ein Script dynamisch (mit Fetch für bessere Fehlerbehandlung)
+  // Lade ein Script dynamisch
   async loadScript(src) {
-    try {
-      const response = await fetch(src, { method: "HEAD" });
-      if (!response.ok) {
-        // Datei existiert nicht - ignoriere
-        return;
-      }
+    const script = document.createElement("script");
+    script.src = src;
+    document.head.appendChild(script);
 
-      // Lade das Script
-      const script = document.createElement("script");
-      script.src = src;
-      document.head.appendChild(script);
-
-      // Warte auf Laden
-      await new Promise((resolve, reject) => {
-        script.onload = resolve;
-        script.onerror = reject;
-      });
-    } catch (error) {
-      // Ignoriere Fehler bei optionalen Scripts
-    }
+    // Warte auf Laden
+    await new Promise((resolve, reject) => {
+      script.onload = resolve;
+      script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    });
   },
 
   // Rendere den Studienplan
@@ -300,6 +289,3 @@ window.loadStudiengangConfig =
   window.StudienplanConfigLoader.loadStudiengangConfig.bind(
     window.StudienplanConfigLoader,
   );
-
-// Markiere als geladen
-window.subModulesReady.configLoader = Promise.resolve();

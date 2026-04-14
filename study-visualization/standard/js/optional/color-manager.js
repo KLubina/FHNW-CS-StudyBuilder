@@ -336,7 +336,9 @@ window.StudienplanColorManager = {
   },
 
   getCurrentStudiengang() {
-    return document.body.getAttribute("data-studiengang") || "eth-cs";
+    return (
+      document.body.getAttribute("data-studiengang") || "fhnw-cs-assessment"
+    );
   },
 };
 
@@ -353,6 +355,3 @@ if (
   // Kleiner Timeout damit DOM-abhängige Elemente sicher vorhanden sind
   setTimeout(() => window.StudienplanColorManager.initialize(), 0);
 }
-
-// Markiere als geladen
-window.subModulesReady["color-manager"] = Promise.resolve();

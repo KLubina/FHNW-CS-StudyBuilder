@@ -6,7 +6,7 @@
  * - optional/  → optionale Erweiterungen (Tooltip, KP-Counter, Color-Mode, Major/Minor, Wahlmodule)
  *
  * Lade-Reihenfolge:
- * 1) Zuerst core/index.js (dies initialisiert und lädt seine eigenen Submodule)
+ * 1) Zuerst Core-Module in fester Reihenfolge laden
  * 2) Danach optionale Module (fehlende optionale Module dürfen das Laden NICHT abbrechen)
  */
 
@@ -16,62 +16,42 @@ const optionalPath = "js/optional";
 
 console.log("📦 Loading Studienplan components (core first, then optional)...");
 
-// Initialize global object to track sub-module loading
-window.subModulesReady = {};
-
 // Small helper to load a single script and return a promise
 async function loadScript(src) {
-  try {
-    // Check if file exists first
-    const response = await fetch(src, { method: "HEAD" });
-    if (!response.ok) {
-      throw new Error(`File not found: ${src}`);
-    }
-
-    // Load the script
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onerror = () => {
-        console.error(`❌ Failed to load: ${src}`);
-        reject(new Error(`Failed to load ${src}`));
-      };
-      script.onload = () => {
-        console.log(`✅ Loaded: ${src}`);
-        resolve();
-      };
-      document.head.appendChild(script);
-    });
-  } catch (error) {
-    console.error(`❌ Failed to load: ${src} - ${error.message}`);
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onerror = () => {
+      const error = new Error(`Failed to load ${src}`);
+      console.error(`❌ ${error.message}`);
+      reject(error);
+    };
+    script.onload = () => {
+      console.log(`✅ Loaded: ${src}`);
+      resolve();
+    };
+    document.head.appendChild(script);
+  });
 }
 
 // Promise that resolves when core and optional modules are loaded (lenient for optional)
 window.baseModulesReady = (async () => {
-  // 1) Load core entrypoint first
-  console.log("📥 Loading core/index.js ...");
-  await loadScript(`${corePath}/index.js`);
-
-  // 2) CRITICAL: Wait for ALL core sub-modules to finish loading FIRST
-  // This ensures Initialization.js (which defines the base initialize method)
-  // is loaded BEFORE optional modules try to patch it
-  console.log("⏳ Waiting for core sub-modules to finish loading ...");
+  // 1) Load core modules in deterministic order
   const coreModules = [
-    "utils",
-    "module",
-    "legend",
-    "layout",
-    "configLoader",
-    "core",
+    "utils.js",
+    "module.js",
+    "legend.js",
+    "layout.js",
+    "configLoader.js",
+    "core.js",
   ];
-  await Promise.all(
-    coreModules.map((key) => window.subModulesReady[key]).filter(Boolean),
-  );
+  console.log("📥 Loading core modules ...");
+  for (const moduleName of coreModules) {
+    await loadScript(`${corePath}/${moduleName}`);
+  }
   console.log("✅ Core modules loaded successfully");
 
-  // 3) NOW load optional modules (after core is complete)
+  // 2) NOW load optional modules (after core is complete)
   const optionalModules = [
     "tooltip.js",
     "kp-counter.js",
@@ -91,15 +71,6 @@ window.baseModulesReady = (async () => {
       `⚠️ Optional modules failed to load: ${failed}. Core continues.`,
     );
   }
-
-  // 4) Wait for optional sub-modules to finish loading
-  console.log("⏳ Waiting for optional sub-modules to finish loading ...");
-  const optionalKeys = Object.keys(window.subModulesReady).filter(
-    (k) => !coreModules.includes(k),
-  );
-  await Promise.all(
-    optionalKeys.map((key) => window.subModulesReady[key]).filter(Boolean),
-  );
   console.log("✅ All modules (core + optional) loaded successfully");
 })();
 

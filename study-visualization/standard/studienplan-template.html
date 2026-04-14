@@ -90,34 +90,9 @@
         const programClassesCSS = document.getElementById('program-classes-css');
         const programLayoutCSS = document.getElementById('program-layout-css');
 
-        const setStylesheetIfExists = async (linkElement, href, notFoundMessage) => {
-            try {
-                const response = await fetch(href, { method: 'HEAD' });
-                if (response.ok) {
-                    linkElement.href = href;
-                } else {
-                    console.log(notFoundMessage);
-                }
-            } catch {
-                console.log(notFoundMessage);
-            }
-        };
-
-        setStylesheetIfExists(
-            programColorsCSS,
-            `../program-specific/${studiengang}/standard-config/colors/colors.css`,
-            `No colors.css found for ${studiengang}`
-        );
-        setStylesheetIfExists(
-            programClassesCSS,
-            `../program-specific/${studiengang}/standard-config/colors/classes.css`,
-            `No classes.css found for ${studiengang}`
-        );
-        setStylesheetIfExists(
-            programLayoutCSS,
-            `../program-specific/${studiengang}/individual/layout.css`,
-            `No layout.css found for ${studiengang}`
-        );
+        programColorsCSS.href = `../program-specific/${studiengang}/standard-config/colors/colors.css`;
+        programClassesCSS.href = `../program-specific/${studiengang}/standard-config/colors/classes.css`;
+        programLayoutCSS.href = `../program-specific/${studiengang}/individual/layout.css`;
 
         // Error handling falls Dateien nicht existieren
         programColorsCSS.onerror = () => {

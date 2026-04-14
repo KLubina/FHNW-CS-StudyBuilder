@@ -45,6 +45,3 @@ window.StudienplanLegend = {
     return category;
   },
 };
-
-// Markiere als geladen
-window.subModulesReady.legend = Promise.resolve();

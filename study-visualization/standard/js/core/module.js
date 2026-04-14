@@ -192,6 +192,3 @@ window.StudienplanModule = {
 };
 
 window.StudienplanModule.initialize();
-
-// Markiere als geladen
-window.subModulesReady.module = Promise.resolve();
