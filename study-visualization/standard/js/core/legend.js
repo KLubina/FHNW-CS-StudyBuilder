@@ -3,12 +3,30 @@
  */
 
 window.StudienplanLegend = {
+  shouldHideCategory(category) {
+    const normalized = String(category || "")
+      .trim()
+      .toLowerCase();
+    return [
+      "software",
+      "programmierung",
+      "systeme",
+      "ergänzungen",
+      "ergaenzungen",
+      "theoretische",
+    ].includes(normalized);
+  },
+
   // Erstelle Legende basierend auf Kategorien
   renderLegend(categories) {
     const legendContainer = document.getElementById("legende");
     if (!legendContainer) return;
 
-    const legendHTML = categories
+    const visibleCategories = (categories || []).filter(
+      (category) => !this.shouldHideCategory(category),
+    );
+
+    const legendHTML = visibleCategories
       .map(
         (category) => `
             <div class="legende-item ${category}">

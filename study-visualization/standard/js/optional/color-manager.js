@@ -306,7 +306,25 @@ window.StudienplanColorManager = {
       categories = mode.getCategories().map((c) => c.klasse);
     }
 
-    const legendHTML = categories
+    const blockedCategories = new Set([
+      "software",
+      "programmierung",
+      "systeme",
+      "ergänzungen",
+      "ergaenzungen",
+      "theoretische",
+    ]);
+
+    const visibleCategories = categories.filter(
+      (category) =>
+        !blockedCategories.has(
+          String(category || "")
+            .trim()
+            .toLowerCase(),
+        ),
+    );
+
+    const legendHTML = visibleCategories
       .map(
         (category) => `
             <div class="legende-item ${category}">
