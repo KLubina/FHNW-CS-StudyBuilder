@@ -37,11 +37,16 @@ window.StudienplanKPCounter = {
   },
 
   updateTotalKP() {
-    const modules = document.querySelectorAll(".modul:not(.module-kp-exempt)");
+    // Zähle nur Module, die tatsächlich im Studienplan (in Semester-Containern)
+    // platziert sind. Dadurch werden Platzhalter, Legendeneinträge und
+    // Auswahl-Dialoge nicht mitgezählt.
+    const modules = document.querySelectorAll(
+      ".semester .module-container .modul:not(.module-kp-exempt)",
+    );
     let total = 0;
 
     modules.forEach((module) => {
-      const ects = parseInt(module.dataset.ects) || 0;
+      const ects = parseInt(module.dataset.ects, 10) || 0;
       total += ects;
     });
 

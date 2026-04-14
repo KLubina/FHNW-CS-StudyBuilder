@@ -591,7 +591,6 @@ window.StudienplanWahlmodule = {
       moduleElement.classList.add(
         "studyplan-assigned-module",
         "project-assigned-module",
-        "module-kp-exempt",
       );
       semesterContainer.appendChild(moduleElement);
     });
