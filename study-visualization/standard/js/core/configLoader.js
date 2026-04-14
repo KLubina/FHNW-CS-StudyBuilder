@@ -142,18 +142,23 @@ window.StudienplanConfigLoader = {
     // Mappe Kategorien zu CSS-Klassen
     const mappedModules = this.mapCategoriesToClasses(modules);
 
-    // Gruppiere Module
+    // Entferne Assessment-Module aus dem initialen Render, damit sie
+    // nur über die Zuweisung in den Studienplan gelangen (vermeidet Duplikate)
+    const modulesToRender = Array.isArray(mappedModules)
+      ? mappedModules.filter((m) => !m.isAssessment)
+      : mappedModules;
+
+    // Gruppiere Module (ohne Assessments)
     const grouped =
-      window.StudienplanUtils.groupModulesByYearAndSemester(mappedModules);
+      window.StudienplanUtils.groupModulesByYearAndSemester(modulesToRender);
 
     // Rendere Layout
     window.StudienplanLayout.renderLayout(grouped);
 
-    // Rendere Legende
+    // Rendere Legende (basierend auf tatsächlich gerenderten Modulen)
     const categories =
-      window.StudienplanUtils.getUniqueCategories(mappedModules);
+      window.StudienplanUtils.getUniqueCategories(modulesToRender);
     window.StudienplanLegend.renderLegend(categories);
-
     // Setze Titel
     this.setTitles(studiengang);
 
