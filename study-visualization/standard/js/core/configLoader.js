@@ -4,8 +4,9 @@
 
 window.StudienplanConfigLoader = {
   // Lade Konfiguration für einen Studiengang
-  async loadStudiengangConfig(studiengang) {
+  async loadStudiengangConfig() {
     try {
+      const studiengang = window.APP_STUDIENGANG || "fhnw-cs-assessment";
       const baseProgramPath = "../program-specific";
 
       // Bestimme das Modell (JETZT NUR NOCH MONO FÜR ALLE)

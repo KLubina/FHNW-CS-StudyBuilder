@@ -31,9 +31,4 @@ window.StudienplanUtils = {
   calculateTotalECTS(modules) {
     return modules.reduce((total, module) => total + (module.ects || 0), 0);
   },
-
-  // Erstelle URL für Studiengang
-  createStudiengangURL(studiengang) {
-    return `?studiengang=${encodeURIComponent(studiengang)}`;
-  },
 };

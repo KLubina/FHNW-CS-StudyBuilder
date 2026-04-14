@@ -330,9 +330,7 @@ window.StudienplanColorManager = {
   },
 
   getCurrentStudiengang() {
-    return (
-      document.body.getAttribute("data-studiengang") || "fhnw-cs-assessment"
-    );
+    return window.APP_STUDIENGANG || "fhnw-cs-assessment";
   },
 };
 

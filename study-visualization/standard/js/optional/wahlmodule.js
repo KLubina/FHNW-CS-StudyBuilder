@@ -6,11 +6,7 @@ window.StudienplanWahlmodule = {
   loadedSources: {}, // Cache für geladene Modul-Daten
 
   getCurrentStudiengang() {
-    return (
-      document.body.getAttribute("data-studiengang") ||
-      new URLSearchParams(window.location.search).get("studiengang") ||
-      "fhnw-cs-assessment"
-    );
+    return window.APP_STUDIENGANG || "fhnw-cs-assessment";
   },
 
   getStorageKey(source, category = "") {

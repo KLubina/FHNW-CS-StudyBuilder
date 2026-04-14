@@ -64,7 +64,7 @@
     </style>
 </head>
 
-<body data-studiengang="">
+<body data-studiengang="fhnw-cs-assessment">
     <a href="../../index.html" class="hub-back-btn">← Zurueck zum FHNW Hub</a>
 
     <h1 id="studienplan-title">Studienplan</h1>
@@ -88,10 +88,8 @@
     <script src="js/studienplan-base-loader.js"></script>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const studiengang = urlParams.get('studiengang') || 'fhnw-cs-assessment';
-
-        document.body.setAttribute('data-studiengang', studiengang);
+        const studiengang = 'fhnw-cs-assessment';
+        window.APP_STUDIENGANG = studiengang;
 
         const programColorsCSS = document.getElementById('program-colors-css');
         const programClassesCSS = document.getElementById('program-classes-css');
@@ -113,7 +111,7 @@
 
         document.addEventListener('DOMContentLoaded', async function () {
             await window.baseModulesReady;
-            window.loadStudiengangConfig(studiengang);
+            window.loadStudiengangConfig();
         });
     </script>
 </body>
