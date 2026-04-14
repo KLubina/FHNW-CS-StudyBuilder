@@ -15,10 +15,11 @@ window.StudienplanLayout = {
           ${years.map((year) => this.renderYear(year, groupedModules[year] || {})).join("")}
         </div>
       ` +
+      this.renderAssessmentSection() +
+      this.renderProjectSection() +
       this.renderWahlmoduleSections() +
       this.renderVertiefungenSections() +
-      this.renderContextSections() +
-      this.renderProjectSection();
+      this.renderContextSections();
 
     container.innerHTML = layoutHTML;
   },
@@ -58,6 +59,28 @@ window.StudienplanLayout = {
             <div class="projekte-bereich">
                 <h3 class="projekte-title">Projekte</h3>
                 <div class="projekte-module-row">
+                    ${moduleRow}
+                </div>
+            </div>
+        `;
+  },
+
+  renderAssessmentSection() {
+    const modules =
+      window.FHNWCSAssessmentAssessmentModules ||
+      window.StudiengangAssessmentModules ||
+      (Array.isArray(window.StudiengangModules)
+        ? window.StudiengangModules.filter((m) => m && m.isAssessment)
+        : []);
+
+    if (!Array.isArray(modules) || modules.length === 0) return "";
+
+    const moduleRow = window.StudienplanModule.renderSemesterModules(modules);
+
+    return `
+            <div class="assessments-bereich">
+                <h3 class="assessments-title">Assessment-Module</h3>
+                <div class="assessments-module-row">
                     ${moduleRow}
                 </div>
             </div>

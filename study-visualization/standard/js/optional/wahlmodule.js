@@ -164,6 +164,126 @@ window.StudienplanWahlmodule = {
     this.refreshWahlmoduleViews();
   },
 
+  /* Assessment assignment support (ähnlich wie Projekte) */
+  getAssessmentStorageKey() {
+    return [
+      "studienplan",
+      this.getCurrentStudiengang(),
+      "assessments",
+      "assignments",
+    ]
+      .map((part) => encodeURIComponent(String(part || "")))
+      .join(":");
+  },
+
+  loadPersistedAssessmentAssignments() {
+    try {
+      const raw = window.localStorage.getItem(this.getAssessmentStorageKey());
+      if (!raw) return {};
+
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return {};
+
+      const normalized = {};
+      Object.keys(parsed).forEach((name) => {
+        normalized[name] = this.normalizeSemester(parsed[name]);
+      });
+
+      return normalized;
+    } catch (error) {
+      return {};
+    }
+  },
+
+  savePersistedAssessmentAssignments(assignments) {
+    try {
+      window.localStorage.setItem(
+        this.getAssessmentStorageKey(),
+        JSON.stringify(assignments || {}),
+      );
+    } catch (error) {
+      console.warn("Konnte Assessment-Zuweisungen nicht speichern:", error);
+    }
+  },
+
+  getAssessmentModules() {
+    return (
+      window.FHNWCSAssessmentAssessmentModules ||
+      window.StudiengangAssessmentModules ||
+      (Array.isArray(window.StudiengangModules)
+        ? window.StudiengangModules.filter((m) => m && m.isAssessment)
+        : [])
+    );
+  },
+
+  renderAssessmentAssignmentCard(module, assignedSemester) {
+    const moduleForRender = {
+      ...module,
+      standardcategory: this.resolveCategoryClass(module.standardcategory),
+    };
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+    const selectId = `assessment-semester-${this.escapeHtml(module.name)}`;
+    const semesterLabel =
+      assignedSemester == null
+        ? "Noch nicht zugewiesen"
+        : `Semester ${assignedSemester}`;
+    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
+      const semesterNumber = index + 1;
+      const selectedAttr =
+        assignedSemester === semesterNumber ? "selected" : "";
+      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
+    }).join("");
+
+    return `
+      <div class="assessment-assignment-card" data-assessment-name="${this.escapeHtml(module.name)}">
+        ${moduleHTML}
+        <div class="assessment-assignment-actions">
+          <div class="assessment-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
+          <div class="assessment-semester-select-wrapper">
+            <label class="assessment-semester-select-label" for="${selectId}">Semester zuweisen</label>
+            <select
+              id="${selectId}"
+              class="assessment-semester-select"
+              data-action="assign-assessment-semester"
+              data-assessment-name="${this.escapeHtml(module.name)}"
+            >
+              <option value="">Nicht zugewiesen</option>
+              ${semesterOptions}
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  refreshAssessmentAssignmentsPanel() {
+    const assessmentRow = document.querySelector(".assessments-module-row");
+    if (!assessmentRow) return;
+
+    const assessmentModules = this.getAssessmentModules();
+    if (!Array.isArray(assessmentModules) || assessmentModules.length === 0) {
+      assessmentRow.innerHTML = "";
+      return;
+    }
+
+    const assessmentAssignments = this.loadPersistedAssessmentAssignments();
+    assessmentRow.innerHTML = assessmentModules
+      .map((module) =>
+        this.renderAssessmentAssignmentCard(
+          module,
+          this.normalizeSemester(assessmentAssignments[module.name]),
+        ),
+      )
+      .join("");
+  },
+
+  updateAssessmentAssignment(assessmentName, semester) {
+    const assignments = this.loadPersistedAssessmentAssignments();
+    assignments[assessmentName] = this.normalizeSemester(semester);
+    this.savePersistedAssessmentAssignments(assignments);
+    this.refreshWahlmoduleViews();
+  },
+
   createAssignmentId() {
     if (window.crypto?.randomUUID) {
       return window.crypto.randomUUID();
@@ -366,6 +486,7 @@ window.StudienplanWahlmodule = {
       this.renderSelectedModulesPanel(placeholderElement, assignments);
     });
 
+    this.refreshAssessmentAssignmentsPanel();
     this.refreshProjectAssignmentsPanel();
 
     this.renderStudyPlanAssignments();
@@ -474,6 +595,40 @@ window.StudienplanWahlmodule = {
       );
       semesterContainer.appendChild(moduleElement);
     });
+
+    // Assessment-Module einfügen (falls zugewiesen)
+    const assessmentAssignments = this.loadPersistedAssessmentAssignments();
+    this.getAssessmentModules().forEach((assessmentModule) => {
+      const assignedSemester = this.normalizeSemester(
+        assessmentAssignments[assessmentModule.name],
+      );
+      if (!assignedSemester) return;
+
+      const year = Math.ceil(assignedSemester / 2);
+      const semesterInYear = assignedSemester % 2 === 1 ? 1 : 2;
+      const semesterContainer = document.querySelector(
+        `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+      );
+      if (!semesterContainer) return;
+
+      const moduleForRender = {
+        ...assessmentModule,
+        standardcategory: this.resolveCategoryClass(
+          assessmentModule.standardcategory,
+        ),
+      };
+      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = moduleHTML;
+      const moduleElement = tempDiv.firstElementChild;
+      if (!moduleElement) return;
+
+      moduleElement.classList.add(
+        "studyplan-assigned-module",
+        "assessment-assigned-module",
+      );
+      semesterContainer.appendChild(moduleElement);
+    });
   },
 
   findAssignment(source, category, assignmentId) {
@@ -538,6 +693,19 @@ window.StudienplanWahlmodule = {
         const selectedValue = projectAssignSelect.value;
         const semester = selectedValue ? Number(selectedValue) : null;
         this.updateProjectAssignment(projectName, semester);
+        return;
+      }
+
+      const assessmentAssignSelect = e.target.closest(
+        "select[data-action='assign-assessment-semester']",
+      );
+      if (assessmentAssignSelect) {
+        const assessmentName = assessmentAssignSelect.getAttribute(
+          "data-assessment-name",
+        );
+        const selectedValue = assessmentAssignSelect.value;
+        const semester = selectedValue ? Number(selectedValue) : null;
+        this.updateAssessmentAssignment(assessmentName, semester);
         return;
       }
 
