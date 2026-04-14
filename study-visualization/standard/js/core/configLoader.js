@@ -18,33 +18,7 @@ window.StudienplanConfigLoader = {
       const categoriesConfigPath = `${baseProgramPath}/standard-config/standardcategories-config.js`;
       await this.loadScript(categoriesConfigPath);
 
-      // Lade Color-Config falls vorhanden (für CSE)
-      const colorConfigPath = `${baseProgramPath}/standard-config/color-config.js`;
-      try {
-        await this.loadScript(colorConfigPath);
-      } catch (e) {
-        // Color-Config ist optional
-      }
-
-      // Lade Color Management Configs falls vorhanden
-      const secondCategoriesPath = `${baseProgramPath}/colormanagement/secondcategories-config.js`;
-      try {
-        await this.loadScript(secondCategoriesPath);
-      } catch (e) {
-        // Optional
-      }
-      const thirdCategoriesPath = `${baseProgramPath}/colormanagement/thirdcategories-config.js`;
-      try {
-        await this.loadScript(thirdCategoriesPath);
-      } catch (e) {
-        // Optional
-      }
-      const fourthCategoriesPath = `${baseProgramPath}/colormanagement/fourthcategories-config.js`;
-      try {
-        await this.loadScript(fourthCategoriesPath);
-      } catch (e) {
-        // Optional
-      }
+      // Single-program setup: keine zusätzlichen Color-Config-Dateien mehr
 
       // Lade Modul-Daten
       // Verwende das standardisierte basic-modules-data.js
@@ -147,9 +121,19 @@ window.StudienplanConfigLoader = {
     // Rendere Layout
     window.StudienplanLayout.renderLayout(grouped);
 
-    // Rendere Legende (basierend auf tatsächlich gerenderten Modulen)
-    const categories =
-      window.StudienplanUtils.getUniqueCategories(modulesToRender);
+    // Rendere Legende (nur mit bekannten Kategorien, damit keine farblosen Einträge erscheinen)
+    const configuredLegendClasses = new Set(
+      (window.StudiengangCategoriesConfig?.kategorien || []).map(
+        (cat) => cat.klasse,
+      ),
+    );
+    const categories = window.StudienplanUtils.getUniqueCategories(
+      modulesToRender,
+    ).filter(
+      (category) =>
+        configuredLegendClasses.size === 0 ||
+        configuredLegendClasses.has(category),
+    );
     window.StudienplanLegend.renderLegend(categories);
     // Setze Titel
     this.setTitles(studiengang);
@@ -219,14 +203,32 @@ window.StudienplanConfigLoader = {
       vertiefungen: "vertiefung",
       projekte: "projekt",
       kontext: "kontext",
-      "software engineering": "kontext",
+      "software engineering": "software-engineering",
+    };
+
+    const resolveCategoryAlias = (rawCategory) => {
+      const normalized = normalizeCategoryName(rawCategory);
+      if (!normalized) return null;
+
+      if (legacyAliases[normalized]) {
+        return legacyAliases[normalized];
+      }
+
+      // Tolerate shortened labels from legacy/imported data
+      if (normalized.startsWith("software")) return "software-engineering";
+      if (normalized.startsWith("programmierung")) return "vertiefung";
+      if (normalized.startsWith("systeme")) return "projekt";
+      if (normalized.startsWith("ergänzungen")) return "kontext";
+      if (normalized.startsWith("theoretische")) return "fachgrundlagen";
+
+      return null;
     };
 
     return modules.map((module) => ({
       ...module,
       standardcategory:
         categoryMap[normalizeCategoryName(module.standardcategory)] ||
-        legacyAliases[normalizeCategoryName(module.standardcategory)] ||
+        resolveCategoryAlias(module.standardcategory) ||
         this.getCategoryFromColorConfig(module) ||
         this.simplifyCategory(module.standardcategory),
     }));

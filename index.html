@@ -97,7 +97,7 @@
 
         programColorsCSS.href = `../program-specific/standard-config/colors/colors.css`;
         programClassesCSS.href = `../program-specific/standard-config/colors/classes.css`;
-        programLayoutCSS.href = `../program-specific/individual/layout.css`;
+        programLayoutCSS.href = '';
 
         programColorsCSS.onerror = () => {
             console.log(`No colors.css found for ${studiengang}`);
@@ -105,9 +105,7 @@
         programClassesCSS.onerror = () => {
             console.log(`No classes.css found for ${studiengang}`);
         };
-        programLayoutCSS.onerror = () => {
-            console.log(`No layout.css found for ${studiengang}`);
-        };
+        programLayoutCSS.onerror = null;
 
         document.addEventListener('DOMContentLoaded', async function () {
             await window.baseModulesReady;

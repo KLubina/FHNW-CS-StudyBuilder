@@ -133,7 +133,7 @@ window.StudienplanLayout = {
     const title = section.title || section.category || "Kontext";
     const category = section.category || title;
     const source = section.source || "context-modules-data.js";
-    const className = section.className || "kontext";
+    const className = this.resolveCategoryClass(section.className || "kontext");
     const minEcts = Number(section.minEcts || 0);
     const escapeHtml = (value) =>
       String(value)
@@ -167,7 +167,9 @@ window.StudienplanLayout = {
     const title = section.title || section.category || "Wahlmodule";
     const category = section.category || title;
     const source = section.source || "wahlmodule-data.js";
-    const className = section.className || "Ergänzungen";
+    const className = this.resolveCategoryClass(
+      section.className || "Ergänzungen",
+    );
     const minEcts = Number(section.minEcts || 0);
     const escapeHtml = (value) =>
       String(value)
@@ -231,5 +233,44 @@ window.StudienplanLayout = {
                 </div>
             </div>
         `;
+  },
+
+  resolveCategoryClass(categoryName) {
+    const normalizedName = String(categoryName || "")
+      .trim()
+      .toLowerCase();
+
+    const categoryAliases = {
+      vertiefungen: "vertiefung",
+      fachergänzungen: "fachgrundlagen",
+      fachergaenzungen: "fachgrundlagen",
+      "software engineering": "software-engineering",
+      programmierung: "vertiefung",
+      systeme: "projekt",
+      ergänzungen: "kontext",
+      ergaenzungen: "kontext",
+      theoretische: "fachgrundlagen",
+    };
+
+    if (categoryAliases[normalizedName]) {
+      return categoryAliases[normalizedName];
+    }
+
+    const categoryConfig = window.StudiengangCategoriesConfig?.kategorien || [];
+    const matchedCategory = categoryConfig.find(
+      (category) =>
+        String(category.name || "")
+          .trim()
+          .toLowerCase() === normalizedName,
+    );
+
+    if (matchedCategory?.klasse) {
+      return matchedCategory.klasse;
+    }
+
+    return normalizedName
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
   },
 };
