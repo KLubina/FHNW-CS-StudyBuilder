@@ -206,16 +206,10 @@ window.StudienplanColorManager = {
 
     // Lade neue CSS
     if (mode.css.classes) {
-      this.loadCSS(
-        `../program-specific/${this.getCurrentStudiengang()}/${mode.css.classes}`,
-        "color-mode",
-      );
+      this.loadCSS(`../program-specific/${mode.css.classes}`, "color-mode");
     }
     if (mode.css.colors) {
-      this.loadCSS(
-        `../program-specific/${this.getCurrentStudiengang()}/${mode.css.colors}`,
-        "color-mode",
-      );
+      this.loadCSS(`../program-specific/${mode.css.colors}`, "color-mode");
     }
   },
 

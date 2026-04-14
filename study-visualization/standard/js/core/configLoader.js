@@ -6,17 +6,19 @@ window.StudienplanConfigLoader = {
   // Lade Konfiguration für einen Studiengang
   async loadStudiengangConfig(studiengang) {
     try {
+      const baseProgramPath = "../program-specific";
+
       // Bestimme das Modell (JETZT NUR NOCH MONO FÜR ALLE)
       // Lade General-Konfiguration
-      const generalConfigPath = `../program-specific/${studiengang}/standard-config/general-config.js`;
+      const generalConfigPath = `${baseProgramPath}/standard-config/general-config.js`;
       await this.loadScript(generalConfigPath);
 
       // Lade Kategorien-Konfiguration
-      const categoriesConfigPath = `../program-specific/${studiengang}/standard-config/standardcategories-config.js`;
+      const categoriesConfigPath = `${baseProgramPath}/standard-config/standardcategories-config.js`;
       await this.loadScript(categoriesConfigPath);
 
       // Lade Color-Config falls vorhanden (für CSE)
-      const colorConfigPath = `../program-specific/${studiengang}/standard-config/color-config.js`;
+      const colorConfigPath = `${baseProgramPath}/standard-config/color-config.js`;
       try {
         await this.loadScript(colorConfigPath);
       } catch (e) {
@@ -24,19 +26,19 @@ window.StudienplanConfigLoader = {
       }
 
       // Lade Color Management Configs falls vorhanden
-      const secondCategoriesPath = `../program-specific/${studiengang}/colormanagement/secondcategories-config.js`;
+      const secondCategoriesPath = `${baseProgramPath}/colormanagement/secondcategories-config.js`;
       try {
         await this.loadScript(secondCategoriesPath);
       } catch (e) {
         // Optional
       }
-      const thirdCategoriesPath = `../program-specific/${studiengang}/colormanagement/thirdcategories-config.js`;
+      const thirdCategoriesPath = `${baseProgramPath}/colormanagement/thirdcategories-config.js`;
       try {
         await this.loadScript(thirdCategoriesPath);
       } catch (e) {
         // Optional
       }
-      const fourthCategoriesPath = `../program-specific/${studiengang}/colormanagement/fourthcategories-config.js`;
+      const fourthCategoriesPath = `${baseProgramPath}/colormanagement/fourthcategories-config.js`;
       try {
         await this.loadScript(fourthCategoriesPath);
       } catch (e) {
@@ -45,11 +47,11 @@ window.StudienplanConfigLoader = {
 
       // Lade Modul-Daten
       // Verwende das standardisierte basic-modules-data.js
-      const dataPath = `../program-specific/${studiengang}/data/basic-modules-data.js`;
+      const dataPath = `${baseProgramPath}/data/basic-modules-data.js`;
       await this.loadScript(dataPath);
 
       // Lade Wahlmodul-Sektionen falls vorhanden
-      const wahlmoduleSectionsPath = `../program-specific/${studiengang}/data/wahlmodule-sections.js`;
+      const wahlmoduleSectionsPath = `${baseProgramPath}/data/wahlmodule-sections.js`;
       try {
         await this.loadScript(wahlmoduleSectionsPath);
       } catch (e) {
@@ -57,7 +59,7 @@ window.StudienplanConfigLoader = {
       }
 
       // Lade Vertiefungen/Fachergänzungen-Sektionen falls vorhanden
-      const vertiefungenSectionsPath = `../program-specific/${studiengang}/data/vertiefungen-sections.js`;
+      const vertiefungenSectionsPath = `${baseProgramPath}/data/vertiefungen-sections.js`;
       try {
         await this.loadScript(vertiefungenSectionsPath);
       } catch (e) {
@@ -65,7 +67,7 @@ window.StudienplanConfigLoader = {
       }
 
       // Lade Kontext-Sektionen falls vorhanden
-      const contextSectionsPath = `../program-specific/${studiengang}/data/context-sections.js`;
+      const contextSectionsPath = `${baseProgramPath}/data/context-sections.js`;
       try {
         await this.loadScript(contextSectionsPath);
       } catch (e) {
@@ -73,7 +75,7 @@ window.StudienplanConfigLoader = {
       }
 
       // Lade feste Projektmodule falls vorhanden
-      const projectModulesPath = `../program-specific/${studiengang}/data/project-modules-data.js`;
+      const projectModulesPath = `${baseProgramPath}/data/project-modules-data.js`;
       try {
         await this.loadScript(projectModulesPath);
       } catch (e) {
@@ -94,7 +96,7 @@ window.StudienplanConfigLoader = {
       }
 
       // Lade Modul-Details falls vorhanden (für Module Details Modal)
-      const detailsPath = `../program-specific/${studiengang}/data/basic-modules-details.js`;
+      const detailsPath = `${baseProgramPath}/data/basic-modules-details.js`;
 
       try {
         await this.loadScript(detailsPath);

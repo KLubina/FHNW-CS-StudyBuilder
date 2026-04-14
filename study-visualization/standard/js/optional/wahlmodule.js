@@ -809,11 +809,8 @@ window.StudienplanWahlmodule = {
       return this.loadedSources[source];
     }
 
-    // Bestimme den Basis-Pfad (relativ zum aktuellen Studiengang)
-    const studiengang = this.getCurrentStudiengang();
-
     // Konstruiere vollständigen Pfad
-    const basePath = `../program-specific/${studiengang}/data/`;
+    const basePath = `../program-specific/data/`;
     const fullPath = basePath + source.replace("./", "");
 
     // Lade Datei dynamisch

@@ -4,27 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informatik (Teilzeit) - FHNW</title>
+    <title id="page-title">Studienplan</title>
     <link rel="icon" type="image/svg+xml" href="https://www.svgrepo.com/show/400288/graduationcap.svg">
     <link rel="icon" type="image/png" sizes="256x256" href="https://images.emojiterra.com/mozilla/512px/1f393.png">
+
+    <!-- Keep existing relative paths from the old template working in root index.html -->
+    <base href="study-visualization/standard/">
+
+    <!-- ==== CORE CSS ==== -->
+    <link rel="stylesheet" href="css/core/variables.css">
+    <link rel="stylesheet" href="css/core/layout.css">
+    <link rel="stylesheet" href="css/core/typography.css">
+
+    <!-- ==== CORE COMPONENTS CSS ==== -->
+    <link rel="stylesheet" href="css/core/hub-button.css">
+    <link rel="stylesheet" href="css/core/module.css">
+    <link rel="stylesheet" href="css/core/legend.css">
+
+    <!-- ==== OPTIONAL FEATURES CSS ==== -->
+    <link rel="stylesheet" href="css/optional/study-links.css">
+    <link rel="stylesheet" href="css/optional/tooltip.css">
+    <link rel="stylesheet" href="css/optional/kp-counter.css">
+    <link rel="stylesheet" href="css/optional/module-lists.css">
+    <link rel="stylesheet" href="css/optional/indicators.css">
+    <link rel="stylesheet" href="css/optional/major-minor-selector.css">
+    <link rel="stylesheet" href="css/optional/template-manager.css">
+    <link rel="stylesheet" href="css/optional/color-manager.css">
+    <link rel="stylesheet" href="css/optional/wahlmodule.css">
+
+    <!-- ==== SHARED CSS ==== -->
+    <link rel="stylesheet" id="uzh-common-css" href="">
+
+    <!-- ==== PROGRAM-SPECIFIC CSS (loaded dynamically) ==== -->
+    <link rel="stylesheet" id="program-colors-css" href="">
+    <link rel="stylesheet" id="program-classes-css" href="">
+    <link rel="stylesheet" id="program-layout-css" href="">
+
     <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #f7f9fa;
-            /* Match typical background */
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-
         .hub-back-btn {
             position: fixed;
             top: 14px;
@@ -48,10 +64,58 @@
     </style>
 </head>
 
-<body>
-    <a href="./index.html" class="hub-back-btn">← Zurueck zum FHNW Hub</a>
-    <iframe src="study-visualization/standard/studienplan-template.html?studiengang=fhnw-cs-assessment"
-        title="Studienplan Informatik Teilzeit FHNW"></iframe>
+<body data-studiengang="">
+    <a href="../../index.html" class="hub-back-btn">← Zurueck zum FHNW Hub</a>
+
+    <h1 id="studienplan-title">Studienplan</h1>
+    <h2 id="studienplan-subtitle">mind. 180 KP insgesamt</h2>
+
+    <div id="template-manager-anchor"></div>
+
+    <div id="major-minor-selector" class="major-minor-selector" style="display: none;"></div>
+
+    <div class="container">
+        <div class="studienplan" id="studienplan"></div>
+
+        <div class="farben-legende">
+            <div class="legende-titel" id="legende-titel">Farben-Legende</div>
+            <div id="legende"></div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip-container" style="display: none;"></div>
+
+    <script src="js/studienplan-base-loader.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const studiengang = urlParams.get('studiengang') || 'fhnw-cs-assessment';
+
+        document.body.setAttribute('data-studiengang', studiengang);
+
+        const programColorsCSS = document.getElementById('program-colors-css');
+        const programClassesCSS = document.getElementById('program-classes-css');
+        const programLayoutCSS = document.getElementById('program-layout-css');
+
+        programColorsCSS.href = `../program-specific/standard-config/colors/colors.css`;
+        programClassesCSS.href = `../program-specific/standard-config/colors/classes.css`;
+        programLayoutCSS.href = `../program-specific/individual/layout.css`;
+
+        programColorsCSS.onerror = () => {
+            console.log(`No colors.css found for ${studiengang}`);
+        };
+        programClassesCSS.onerror = () => {
+            console.log(`No classes.css found for ${studiengang}`);
+        };
+        programLayoutCSS.onerror = () => {
+            console.log(`No layout.css found for ${studiengang}`);
+        };
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            await window.baseModulesReady;
+            window.loadStudiengangConfig(studiengang);
+        });
+    </script>
 </body>
 
 </html>
