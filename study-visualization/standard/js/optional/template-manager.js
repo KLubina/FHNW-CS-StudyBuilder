@@ -215,6 +215,8 @@ window.StudienplanTemplateManager = {
           <button type="button" class="template-manager__button template-manager__button--primary" data-action="template-save">Speichern</button>
           <button type="button" class="template-manager__button" data-action="template-load" ${templates.length === 0 ? "disabled" : ""}>Laden</button>
           <button type="button" class="template-manager__button" data-action="template-rename" ${templates.length === 0 ? "disabled" : ""}>Umbenennen</button>
+          <button type="button" class="template-manager__button" data-action="template-export" ${templates.length === 0 ? "disabled" : ""}>Exportieren</button>
+          <button type="button" class="template-manager__button" data-action="template-import">Importieren</button>
           <button type="button" class="template-manager__button template-manager__button--danger" data-action="template-delete" ${templates.length === 0 ? "disabled" : ""}>Löschen</button>
         </div>
       </div>
@@ -251,7 +253,7 @@ window.StudienplanTemplateManager = {
     select.disabled = templates.length === 0;
     actions.forEach((button) => {
       const action = button.getAttribute("data-action");
-      if (action === "template-save") {
+      if (action === "template-save" || action === "template-import") {
         button.disabled = false;
         return;
       }
@@ -396,6 +398,113 @@ window.StudienplanTemplateManager = {
     this.setSelectedTemplateId(updatedTemplates[0]?.id || "");
   },
 
+  exportTemplates() {
+    const templates = this.getTemplates();
+    if (templates.length === 0) {
+      window.alert("Es gibt keine Templates zum Exportieren.");
+      return;
+    }
+
+    const exportData = {
+      version: "1.0",
+      exportedAt: new Date().toISOString(),
+      studiengang: this.getCurrentStudiengang(),
+      templates: templates,
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `templates-${this.getCurrentStudiengang()}-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    window.alert("Templates wurden exportiert.");
+  },
+
+  importTemplates() {
+    const input = document.getElementById("template-import-input");
+    if (input) {
+      input.click();
+      return;
+    }
+
+    // Fallback: Erstelle File Input wenn nicht vorhanden
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".json";
+    fileInput.id = "template-import-input";
+    fileInput.style.display = "none";
+
+    fileInput.addEventListener("change", (event) => {
+      this.handleImportFile(event);
+    });
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+  },
+
+  handleImportFile(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result;
+        if (typeof content !== "string") {
+          throw new Error("Dateiinhalt konnte nicht gelesen werden.");
+        }
+
+        const importData = JSON.parse(content);
+        if (!importData.templates || !Array.isArray(importData.templates)) {
+          throw new Error("Ungültiges Format: Templates Array nicht gefunden.");
+        }
+
+        const currentTemplates = this.getTemplates();
+        const importedTemplates = importData.templates
+          .map((entry) => this.normalizeTemplate(entry))
+          .filter(Boolean);
+
+        if (importedTemplates.length === 0) {
+          window.alert("Keine gültigen Templates in der Datei gefunden.");
+          return;
+        }
+
+        // Merge: Neue IDs für importierte Templates generieren um Konflikte zu vermeiden
+        const mergedTemplates = [
+          ...importedTemplates.map((template) => ({
+            ...template,
+            id: this.createTemplateId(),
+            name: `${template.name} (importiert)`,
+            updatedAt: new Date().toISOString(),
+          })),
+          ...currentTemplates,
+        ];
+
+        this.saveTemplates(mergedTemplates);
+        this.renderTemplateManager();
+        this.setSelectedTemplateId(mergedTemplates[0]?.id || "");
+
+        window.alert(
+          `${importedTemplates.length} Template(s) wurden erfolgreich importiert.`,
+        );
+      } catch (error) {
+        console.error("Import Fehler:", error);
+        window.alert(`Fehler beim Importieren: ${error.message || error}`);
+      }
+    };
+
+    reader.readAsText(file);
+
+    // Reset input
+    event.target.value = "";
+  },
+
   formatUpdatedAt(updatedAt) {
     if (!updatedAt) return "ohne Datum";
 
@@ -451,6 +560,19 @@ window.StudienplanTemplateManager = {
       if (action === "template-delete") {
         event.preventDefault();
         this.deleteSelectedTemplate();
+        return;
+      }
+
+      if (action === "template-export") {
+        event.preventDefault();
+        this.exportTemplates();
+        return;
+      }
+
+      if (action === "template-import") {
+        event.preventDefault();
+        this.importTemplates();
+        return;
       }
     });
 
@@ -459,6 +581,14 @@ window.StudienplanTemplateManager = {
       if (!select) return;
 
       this.refreshTemplateList(select.value);
+    });
+
+    // File input change handler für Import
+    document.addEventListener("change", (event) => {
+      const fileInput = event.target;
+      if (fileInput.id === "template-import-input") {
+        this.handleImportFile(event);
+      }
     });
   },
 };
