@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-05-06T21:53:15.001Z",
+  "studiengang": "fhnw-cs-assessment",
+  "templates": [
+    {
+      "id": "4875a81c-2a1d-4dcb-9ac6-d5d78182b732",
+      "name": "1st-and-2nd-Sem",
+      "updatedAt": "2026-05-06T21:53:11.289Z",
+      "snapshot": {
+        "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"a41c9921-9f76-4eca-821c-8eb11ef49d57\",\"semester\":1,\"module\":{\"name\":\"Einführung in die Programmierung\",\"ects\":3,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]",
+        "studienplan:fhnw-cs-assessment:color-mode": "standard"
+      }
+    }
+  ]
+}
