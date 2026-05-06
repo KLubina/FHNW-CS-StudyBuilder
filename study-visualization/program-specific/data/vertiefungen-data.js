@@ -99,12 +99,6 @@ window.FHNWCSAssessmentVertiefungenData = [
     subcategory: "Spatial Computing",
   },
   {
-    name: "Web Engineering",
-    ects: 3,
-    standardcategory: "Vertiefungen",
-    subcategory: "Web Engineering",
-  },
-  {
     name: "Workshop Web",
     ects: 3,
     standardcategory: "Vertiefungen",
