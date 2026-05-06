@@ -27,12 +27,6 @@ window.FHNWCSAssessmentVertiefungenData = [
     subcategory: "DevOps",
   },
   {
-    name: "ICT System Management",
-    ects: 3,
-    standardcategory: "Vertiefungen",
-    subcategory: "ICT System Management",
-  },
-  {
     name: "Workshop ICT System Management",
     ects: 3,
     standardcategory: "Vertiefungen",
@@ -55,12 +49,6 @@ window.FHNWCSAssessmentVertiefungenData = [
     ects: 3,
     standardcategory: "Vertiefungen",
     subcategory: "ICT System Management",
-  },
-  {
-    name: "Spatial Computing",
-    ects: 3,
-    standardcategory: "Vertiefungen",
-    subcategory: "Spatial Computing",
   },
   {
     name: "Workshop Spatial Computing",
