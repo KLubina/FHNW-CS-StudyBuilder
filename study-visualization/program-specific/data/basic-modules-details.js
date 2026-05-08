@@ -319,4 +319,22 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Einführung in die Analysis": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813278",
   },
+  "Enterprise Applikationsframeworks": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813279",
+  },
+  Applikationssicherheit: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813262",
+  },
+  "Developer Operations": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9789414",
+  },
+  "Application Performance Management": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9066636",
+  },
+  "Public Cloud Services": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9793247",
+  },
+  "Distributed Data Management": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813274",
+  },
 };
