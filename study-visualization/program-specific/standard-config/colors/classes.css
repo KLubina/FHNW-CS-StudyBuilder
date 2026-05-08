@@ -22,7 +22,7 @@
 [data-studiengang="fhnw-cs-assessment"] .modul.fachergaenzungen,
 [data-studiengang="fhnw-cs-assessment"] .legende-item.fachergaenzungen {
   background-color: var(--color-fachergaenzungen);
-  color: var(--color-fachergaenzungen-text, #111827);
+  color: var(--color-fachergaenzungen-text, white);
 }
 
 [data-studiengang="fhnw-cs-assessment"] .modul.projekt,
