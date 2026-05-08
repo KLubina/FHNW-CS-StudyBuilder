@@ -4,15 +4,15 @@
 window.StudiengangCategoriesConfig = {
   // Category definitions
   kategorien: [
+    { name: "Software Engineering", klasse: "software-engineering" },
+    { name: "Programmierung", klasse: "programmierung" },
+    { name: "Systeme", klasse: "projekt" },
     {
       name: "Theoretische Grundlagen und Mathematik",
       klasse: "fachgrundlagen",
     },
     { name: "Vertiefungen", klasse: "vertiefungen" },
-    { name: "Programmierung", klasse: "programmierung" },
     { name: "Fachergänzungen", klasse: "fachergaenzungen" },
-    { name: "Systeme", klasse: "projekt" },
-    { name: "Software Engineering", klasse: "software-engineering" },
     { name: "Projekte", klasse: "projekte" },
     { name: "Kommunikation", klasse: "kommunikation" },
     { name: "BWL", klasse: "bwl" },

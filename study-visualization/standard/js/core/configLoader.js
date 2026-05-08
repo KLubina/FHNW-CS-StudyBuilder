@@ -127,6 +127,12 @@ window.StudienplanConfigLoader = {
         (cat) => cat.klasse,
       ),
     );
+    const categoryOrderMap = new Map(
+      (window.StudiengangCategoriesConfig?.kategorien || []).map(
+        (category, index) => [category.klasse, index],
+      ),
+    );
+
     const categories = window.StudienplanUtils.getUniqueCategories(
       modulesToRender,
     ).filter(
@@ -134,6 +140,16 @@ window.StudienplanConfigLoader = {
         configuredLegendClasses.size === 0 ||
         configuredLegendClasses.has(category),
     );
+    categories.sort((left, right) => {
+      const leftOrder = categoryOrderMap.has(left)
+        ? categoryOrderMap.get(left)
+        : Number.MAX_SAFE_INTEGER;
+      const rightOrder = categoryOrderMap.has(right)
+        ? categoryOrderMap.get(right)
+        : Number.MAX_SAFE_INTEGER;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+      return String(left).localeCompare(String(right), "de");
+    });
     window.StudienplanLegend.renderLegend(categories);
     // Setze Titel
     this.setTitles(studiengang);

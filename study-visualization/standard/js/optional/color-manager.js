@@ -285,6 +285,11 @@ window.StudienplanColorManager = {
     if (!legendContainer) return;
 
     let categories = [];
+    const categoryOrderMap = new Map(
+      (window.StudiengangCategoriesConfig?.kategorien || []).map(
+        (category, index) => [category.klasse, index],
+      ),
+    );
 
     if (modeKey === "standard") {
       const standardMode = this.getStandardModeConfig();
@@ -307,6 +312,16 @@ window.StudienplanColorManager = {
     }
 
     const visibleCategories = categories;
+    visibleCategories.sort((left, right) => {
+      const leftOrder = categoryOrderMap.has(left)
+        ? categoryOrderMap.get(left)
+        : Number.MAX_SAFE_INTEGER;
+      const rightOrder = categoryOrderMap.has(right)
+        ? categoryOrderMap.get(right)
+        : Number.MAX_SAFE_INTEGER;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+      return String(left).localeCompare(String(right), "de");
+    });
 
     const legendHTML = visibleCategories
       .map(

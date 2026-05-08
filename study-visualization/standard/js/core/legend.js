@@ -3,6 +3,13 @@
  */
 
 window.StudienplanLegend = {
+  getCategoryOrderMap() {
+    const categories = window.StudiengangCategoriesConfig?.kategorien || [];
+    return new Map(
+      categories.map((category, index) => [category.klasse, index]),
+    );
+  },
+
   shouldHideCategory(category) {
     return false;
   },
@@ -15,6 +22,17 @@ window.StudienplanLegend = {
     const visibleCategories = (categories || []).filter(
       (category) => !this.shouldHideCategory(category),
     );
+    const orderMap = this.getCategoryOrderMap();
+    visibleCategories.sort((left, right) => {
+      const leftOrder = orderMap.has(left)
+        ? orderMap.get(left)
+        : Number.MAX_SAFE_INTEGER;
+      const rightOrder = orderMap.has(right)
+        ? orderMap.get(right)
+        : Number.MAX_SAFE_INTEGER;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+      return String(left).localeCompare(String(right), "de");
+    });
 
     const legendHTML = visibleCategories
       .map(
