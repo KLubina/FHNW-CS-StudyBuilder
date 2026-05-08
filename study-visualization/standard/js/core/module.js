@@ -129,9 +129,7 @@ window.StudienplanModule = {
         const fileHref = this.toFileHref(materialPath);
         const escapedPath = this.escapeAttribute(fileHref);
         const label = materials.length > 1 ? `Link ${index + 1}` : "Link";
-        // Da Add-ons oft auf target="_blank" negativ reagieren (weil es einen neuen Tab erzwingt bevor das Script greift),
-        // entfernen wir es und lassen den reinen Link:
-        return `<a href="${escapedPath}" class="module-material-button" title="Vorlesungsunterlagen öffnen">${label}</a>`;
+        return `<a href="${escapedPath}" class="module-material-button" title="Vorlesungsunterlagen öffnen" target="_blank" rel="noopener noreferrer">${label}</a>`;
       })
       .join("");
 

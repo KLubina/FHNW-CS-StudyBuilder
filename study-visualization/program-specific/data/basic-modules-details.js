@@ -265,4 +265,58 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
 - lineare und affine Punkttransformationen verwenden (Drehung, Translation, Spiegelung, Normal- und Zentralprojektion (Perspektive))
 - Berechnungen mit Vektoren und Matrizen numerisch mit MATLAB ausfuehren. Sie kennen die Grundlagen der komplexen Zahlen (fuer das Studium von weiterfuehrenden Themen, z.B. Eigenwerttheorie). Sie sind befaehigt, weiterfuehrende Module zu besuchen (Computergraphik, Bildverarbeitung, Physik fuer Computerspiele, weitere Mathematik-Module, usw.)`,
   },
+  "Einführung in die Programmierung": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9241968",
+  },
+  "Design Patterns": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813271",
+  },
+  "Verteilte Systeme": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813306",
+  },
+  "Software Architektur": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813302",
+  },
+  "Softwareentwicklungsprozesse": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9067037",
+  },
+  "Cloud Computing": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813265",
+  },
+  "IT System Management": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9076375",
+  },
+  Datennetze: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9288353",
+  },
+  Systemprogrammierung: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6008081",
+  },
+  "Web Programming": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9568617",
+  },
+  "Functional Programming": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9114929",
+  },
+  "Concurrent Programming": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813270",
+  },
+  "Programmieren in C++": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6008035",
+  },
+  "Diskrete Stochastik": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813273",
+  },
+  Kryptologie: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9118565",
+  },
+  "Einführung in die Theoretische Informatik": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6008329",
+  },
+  "Algorithmen und Datenstrukturen": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9305688",
+  },
+  "Einführung in die Analysis": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813278",
+  },
 };
