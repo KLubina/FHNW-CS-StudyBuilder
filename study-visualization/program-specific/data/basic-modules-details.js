@@ -295,6 +295,9 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Web Programming": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9568617",
   },
+  "Web Engineering": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813307",
+  },
   "Functional Programming": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9114929",
   },
@@ -339,5 +342,17 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   },
   "Mathematik für die Datenkommunikation": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813294",
+  },
+  "Social Network Analysis": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9092818",
+  },
+  "Informations-Visualisierung": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9018825",
+  },
+  "Entwicklung mobiler Applikationen": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6007984",
+  },
+  "Einführung C# und das .NET-Framework": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9100168",
   },
 };
