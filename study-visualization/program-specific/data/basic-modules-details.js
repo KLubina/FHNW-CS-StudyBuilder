@@ -355,4 +355,67 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Einführung C# und das .NET-Framework": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9100168",
   },
+  "3D User Interfaces & Experience Design": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813260",
+  },
+  "Advanced Experience Design": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9209231",
+  },
+  Blockchain: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9329733",
+  },
+  Quantentechnologie: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9470291",
+  },
+  "Custom User Interface Elements": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9200607",
+  },
+  "Data Wrangling": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9370920",
+  },
+  "Datenbank-Architektur für Fortgeschrittene": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6007764",
+  },
+  "Designtheorie und -prozesse": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9046834",
+  },
+  "Einführung in Data Science mit Python": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9267273",
+  },
+  "Embedded Systems Software Design": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6007864",
+  },
+  "Functional Program Design": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9280172",
+  },
+  "Information Security Management": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9170429",
+  },
+  "IoT Engineering": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9280188",
+  },
+  "Marketing und Produktmanagement": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9092808",
+  },
+  "Mathematik für Graphik und Bildverarbeitung": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9115233",
+  },
+  "Personal und Führung": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9098395",
+  },
+  "Physik für Computer Science": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9328937",
+  },
+  "Software Testing and Quality Management": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813304",
+  },
+  "Spiel-Design und -Entwicklung": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6007889",
+  },
+  "einfuhrung in Unity": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9558484",
+  },
+  "Wireless Technologies (EN)": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9041299",
+  },
 };
