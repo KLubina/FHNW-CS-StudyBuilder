@@ -5,18 +5,22 @@
   /* Primary program color */
   --color-primary: #1d4ed8;
 
-  /* Category colors */
+  /* Kategorie-Familie 1: technische Kernmodule */
   --color-fachgrundlagen: #0ea5e9;
-  --color-vertiefungen: #f97316;
+  --color-software-engineering: #9a3412;
+  --color-programmierung: #c2410c;
+  --color-vertiefungen: #ea580c;
   --color-vertiefung: var(--color-vertiefungen);
-  --color-programmierung: #ef4444;
-  --color-fachergaenzungen: #facc15;
+  --color-fachergaenzungen: #f59e0b;
   --color-projekt: #16a34a;
-  --color-software-engineering: #0f766e;
   --color-projekte: #b45309;
+
+  /* Kategorie-Familie 2: ergänzende Begleitmodule */
   --color-kommunikation: #7c3aed;
-  --color-bwl: #db2777;
+  --color-bwl: #8b5cf6;
   --color-englisch: #2563eb;
-  --color-gsw: #0ea5a4;
+  --color-gsw: #0ea5e9;
+
+  /* übrige Farben */
   --color-kontext: #64748b;
 }
