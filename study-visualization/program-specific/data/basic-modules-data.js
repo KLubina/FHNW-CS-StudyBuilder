@@ -52,7 +52,7 @@ window.StudiengangModules = [
   {
     name: "Individuelles Softwareprojekte",
     ects: 6,
-    standardcategory: "Ergänzungen",
+    standardcategory: "Fachergänzungen",
     orientationRank: 1,
     year: 1,
     semester: 2,
@@ -61,7 +61,7 @@ window.StudiengangModules = [
   {
     name: "Data & AI Fundation",
     ects: 6,
-    standardcategory: "Ergänzungen",
+    standardcategory: "Fachergänzungen",
     orientationRank: 1,
     year: 1,
     semester: 2,
