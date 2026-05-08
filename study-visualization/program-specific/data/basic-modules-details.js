@@ -337,6 +337,28 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Public Cloud Services": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9793247",
   },
+  "Workshop Spatial Computing": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9321034",
+  },
+  "Simulation & Agents": {
+    vorlesungsmaterial:
+      "https://www.fhnw.ch/de/studium/module/9321031?show_language=en",
+  },
+  "Extended Reality": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9321028",
+  },
+  "Bildverarbeitung I": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813264",
+  },
+  "Effiziente Algorithmen": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9018818",
+  },
+  Computergrafik: {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813266",
+  },
+  "Workshop Web": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9321025",
+  },
   "Distributed Data Management": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813274",
   },
@@ -348,6 +370,9 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   },
   "Informations-Visualisierung": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9018825",
+  },
+  "Web Clients": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9309249",
   },
   "Entwicklung mobiler Applikationen": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6007984",
