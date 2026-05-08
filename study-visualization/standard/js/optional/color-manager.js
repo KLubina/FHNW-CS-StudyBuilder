@@ -298,9 +298,18 @@ window.StudienplanColorManager = {
       // Verwende die standard Kategorien
       const modules = document.querySelectorAll(".modul");
       const cats = new Set();
+
+      // Nur Kategorien hinzufügen, die in der standardcategories-config definiert sind (mapped classes)
+      const validClasses = new Set(
+        (window.StudiengangCategoriesConfig?.kategorien || []).map(
+          (cat) => cat.klasse,
+        ),
+      );
+
       modules.forEach((m) => {
         const category = Array.from(m.classList).find(
-          (c) => !["modul"].includes(c),
+          (c) =>
+            !["modul", "modul-platzhalter"].includes(c) && validClasses.has(c),
         );
         if (category) cats.add(category);
       });

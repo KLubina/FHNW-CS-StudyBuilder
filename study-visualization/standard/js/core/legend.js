@@ -19,7 +19,10 @@ window.StudienplanLegend = {
     const legendContainer = document.getElementById("legende");
     if (!legendContainer) return;
 
-    const visibleCategories = (categories || []).filter(
+    // Entferne Duplikate und verwende nur eindeutige Kategorien
+    const uniqueCategories = Array.from(new Set(categories || []));
+
+    const visibleCategories = uniqueCategories.filter(
       (category) => !this.shouldHideCategory(category),
     );
     const orderMap = this.getCategoryOrderMap();
