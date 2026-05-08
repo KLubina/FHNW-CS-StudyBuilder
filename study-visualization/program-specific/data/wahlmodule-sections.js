@@ -18,7 +18,7 @@ window.FHNWCSAssessmentWahlmoduleSections = [
   {
     title: "Programmierung",
     category: "Programmierung",
-    className: "vertiefung",
+    className: "programmierung",
     minEcts: 6,
     source: "wahlmodule-data.js",
   },

@@ -7,10 +7,22 @@
   color: var(--color-fachgrundlagen-text, white);
 }
 
-[data-studiengang="fhnw-cs-assessment"] .modul.vertiefung,
-[data-studiengang="fhnw-cs-assessment"] .legende-item.vertiefung {
-  background-color: var(--color-vertiefung);
-  color: var(--color-vertiefung-text, white);
+[data-studiengang="fhnw-cs-assessment"] .modul.vertiefungen,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.vertiefungen {
+  background-color: var(--color-vertiefungen);
+  color: var(--color-vertiefungen-text, white);
+}
+
+[data-studiengang="fhnw-cs-assessment"] .modul.programmierung,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.programmierung {
+  background-color: var(--color-programmierung);
+  color: var(--color-programmierung-text, white);
+}
+
+[data-studiengang="fhnw-cs-assessment"] .modul.fachergaenzungen,
+[data-studiengang="fhnw-cs-assessment"] .legende-item.fachergaenzungen {
+  background-color: var(--color-fachergaenzungen);
+  color: var(--color-fachergaenzungen-text, #111827);
 }
 
 [data-studiengang="fhnw-cs-assessment"] .modul.projekt,

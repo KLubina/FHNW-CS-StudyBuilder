@@ -984,9 +984,9 @@ window.StudienplanWahlmodule = {
       .toLowerCase();
 
     const categoryAliases = {
-      vertiefungen: "vertiefung",
-      fachergänzungen: "fachgrundlagen",
-      fachergaenzungen: "fachgrundlagen",
+      vertiefungen: "vertiefungen",
+      fachergänzungen: "fachergaenzungen",
+      fachergaenzungen: "fachergaenzungen",
     };
 
     if (categoryAliases[normalizedName]) {

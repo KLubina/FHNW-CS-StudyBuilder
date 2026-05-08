@@ -200,7 +200,7 @@ window.StudienplanConfigLoader = {
     // Backward-compatible aliases for renamed legend categories
     const legacyAliases = {
       "fachgrundlagen & fachergänzungen": "fachgrundlagen",
-      vertiefungen: "vertiefung",
+      vertiefungen: "vertiefungen",
       projekte: "projekt",
       kontext: "kontext",
       "software engineering": "software-engineering",
@@ -216,8 +216,11 @@ window.StudienplanConfigLoader = {
 
       // Tolerate shortened labels from legacy/imported data
       if (normalized.startsWith("software")) return "software-engineering";
-      if (normalized.startsWith("programmierung")) return "vertiefung";
+      if (normalized.startsWith("programmierung")) return "programmierung";
+      if (normalized.startsWith("vertiefungen")) return "vertiefungen";
       if (normalized.startsWith("systeme")) return "projekt";
+      if (normalized.startsWith("fachergänzungen")) return "fachergaenzungen";
+      if (normalized.startsWith("fachergaenzungen")) return "fachergaenzungen";
       if (normalized.startsWith("ergänzungen")) return "kontext";
       if (normalized.startsWith("theoretische")) return "fachgrundlagen";
 

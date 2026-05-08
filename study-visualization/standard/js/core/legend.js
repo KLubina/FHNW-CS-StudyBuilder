@@ -4,17 +4,7 @@
 
 window.StudienplanLegend = {
   shouldHideCategory(category) {
-    const normalized = String(category || "")
-      .trim()
-      .toLowerCase();
-    return [
-      "software",
-      "programmierung",
-      "systeme",
-      "ergänzungen",
-      "ergaenzungen",
-      "theoretische",
-    ].includes(normalized);
+    return false;
   },
 
   // Erstelle Legende basierend auf Kategorien

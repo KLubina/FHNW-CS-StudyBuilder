@@ -241,11 +241,11 @@ window.StudienplanLayout = {
       .toLowerCase();
 
     const categoryAliases = {
-      vertiefungen: "vertiefung",
-      fachergänzungen: "fachgrundlagen",
-      fachergaenzungen: "fachgrundlagen",
+      vertiefungen: "vertiefungen",
+      fachergänzungen: "fachergaenzungen",
+      fachergaenzungen: "fachergaenzungen",
       "software engineering": "software-engineering",
-      programmierung: "vertiefung",
+      programmierung: "programmierung",
       systeme: "projekt",
       ergänzungen: "kontext",
       ergaenzungen: "kontext",
