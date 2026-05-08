@@ -277,7 +277,7 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Software Architektur": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813302",
   },
-  "Softwareentwicklungsprozesse": {
+  Softwareentwicklungsprozesse: {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9067037",
   },
   "Cloud Computing": {
@@ -336,5 +336,8 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   },
   "Distributed Data Management": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813274",
+  },
+  "Mathematik für die Datenkommunikation": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813294",
   },
 };
