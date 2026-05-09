@@ -28,6 +28,45 @@ window.StudienplanModule = {
       .filter(Boolean);
   },
 
+  getModuleSecondaryLinks(moduleName) {
+    const details = window.StudiengangModuleDetails?.[moduleName];
+    if (!details) return [];
+
+    const definitions = [
+      {
+        key: "kursseite",
+        label: "KS",
+        title: "Kursseite öffnen",
+      },
+      {
+        key: "moduluebersichtseite",
+        label: "MÜS",
+        title: "Modulübersicht-Seite öffnen",
+      },
+      {
+        key: "repo",
+        label: "Repo",
+        title: "Repository öffnen",
+      },
+    ];
+
+    return definitions
+      .map((definition) => {
+        const rawValue = details[definition.key];
+        if (!rawValue) return null;
+
+        const href = this.toFileHref(rawValue);
+        if (!href) return null;
+
+        return {
+          href,
+          label: definition.label,
+          title: definition.title,
+        };
+      })
+      .filter(Boolean);
+  },
+
   escapeAttribute(value) {
     return String(value)
       .replace(/&/g, "&amp;")
@@ -122,18 +161,34 @@ window.StudienplanModule = {
 
   renderMaterialButtons(moduleName) {
     const materials = this.getModuleMaterialEntries(moduleName);
-    if (materials.length === 0) return "";
+    const secondaryLinks = this.getModuleSecondaryLinks(moduleName);
+    if (materials.length === 0 && secondaryLinks.length === 0) return "";
 
-    const buttonsHtml = materials
-      .map((materialPath, index) => {
-        const fileHref = this.toFileHref(materialPath);
-        const escapedPath = this.escapeAttribute(fileHref);
-        const label = materials.length > 1 ? `Link ${index + 1}` : "Link";
-        return `<a href="${escapedPath}" class="module-material-button" title="Vorlesungsunterlagen öffnen" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    const buttonsHtml = materials.length
+      ? materials
+          .map((materialPath, index) => {
+            const fileHref = this.toFileHref(materialPath);
+            const escapedPath = this.escapeAttribute(fileHref);
+            const label = materials.length > 1 ? `Link ${index + 1}` : "Link";
+            return `<a href="${escapedPath}" class="module-material-button" title="Vorlesungsunterlagen öffnen" target="_blank" rel="noopener noreferrer">${label}</a>`;
+          })
+          .join("")
+      : "";
+
+    const secondaryButtonsHtml = secondaryLinks
+      .map((entry) => {
+        const escapedPath = this.escapeAttribute(entry.href);
+        const escapedTitle = this.escapeAttribute(entry.title);
+        return `<a href="${escapedPath}" class="module-secondary-link-button" title="${escapedTitle}" target="_blank" rel="noopener noreferrer">${entry.label}</a>`;
       })
       .join("");
 
-    return `<div class="module-material-buttons">${buttonsHtml}</div>`;
+    return `
+      <div class="module-link-groups">
+        ${buttonsHtml ? `<div class="module-material-buttons">${buttonsHtml}</div>` : ""}
+        ${secondaryButtonsHtml ? `<div class="module-secondary-link-buttons">${secondaryButtonsHtml}</div>` : ""}
+      </div>
+    `;
   },
 
   // Erstelle HTML für ein einzelnes Modul

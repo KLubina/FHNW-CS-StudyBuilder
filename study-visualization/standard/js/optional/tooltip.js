@@ -9,8 +9,12 @@ window.StudienplanTooltip = {
   initialize() {
     // Klick-Listener für alle Module (außer Platzhaltern)
     document.addEventListener("click", (e) => {
-      if (e.target.closest(".module-material-button")) {
-        // Material-Button wird vom Modul-Handler verarbeitet
+      if (
+        e.target.closest(
+          ".module-material-button, .module-secondary-link-button",
+        )
+      ) {
+        // Link-Buttons werden direkt vom Browser geöffnet
         return;
       }
 

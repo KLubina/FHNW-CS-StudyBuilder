@@ -4,36 +4,68 @@
 window.StudiengangModuleDetails = {
   "Programmieren 1": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9794369",
+    kursseite: "https://prog1.pages.fhnw.ch/2026fs/docs/",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/prog1/drehbuch.html",
+    repo: "https://gitlab.fhnw.ch/prog1/2025hs/docs",
   },
   "User Centered Design and Requirements Engineering": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795670",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/ucdre/drehbuch.html",
   },
   Informationssysteme: {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795679",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/insy/drehbuch.html",
   },
   "Mathematische Grundlagen der Informatik": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813296",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/mgli/drehbuch.html",
   },
   "Software Engineering Fundamentals": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813303",
+    kursseite: "https://swef1.pages.fhnw.ch/docs/swef-website/fs26/index.html",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/swef/drehbuch.html",
   },
   "Individuelles Softwareprojekte": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795668",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/ipro/drehbuch.html",
   },
   "System Engineering": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9797596",
+    kursseite:
+      "https://spd.pages.fhnw.ch/module/sye/sye-content/sye/index.html",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/sye/drehbuch.html",
   },
   "Data & AI Fundation": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795684",
+    kursseite: "https://aihpc.pages.fhnw.ch/courses/daif/page/",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/daif/drehbuch.html",
   },
   "Programmieren 2": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9794384",
+    kursseite: "https://prog2.pages.fhnw.ch/2026fs/docs/",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/prog2/drehbuch.html",
+    repo: "https://gitlab.fhnw.ch/prog2/2026fs/docs",
   },
   "Lineare Algebra": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813291",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/lag/drehbuch.html",
   },
   "Einführung in die Informatik": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795665",
+    kursseite: "https://eidi.pages.fhnw.ch/2026fs/docs/",
+    moduluebersichtseite:
+      "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/eidi/drehbuch.html",
+    repo: "https://gitlab.fhnw.ch/eidi/2025hs/docs",
   },
   "Design Patterns": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813271",
