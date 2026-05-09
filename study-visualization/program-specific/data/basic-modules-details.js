@@ -32,8 +32,8 @@ window.StudiengangModuleDetails = {
   "Lineare Algebra": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813291",
   },
-  "Einführung in die Programmierung": {
-    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9241968",
+  "Einführung in die Informatik": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9795665",
   },
   "Design Patterns": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813271",
