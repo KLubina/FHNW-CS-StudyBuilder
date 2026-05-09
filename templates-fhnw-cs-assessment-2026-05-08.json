@@ -39,13 +39,13 @@
       }
     },
     {
-      "id": "afe9780b-f867-446f-84b9-76213d9f8ef1",
-      "name": "1st-and-2nd-Sem",
-      "updatedAt": "2026-05-08T13:18:20.643Z",
+      "id": "d0ef3794-a6bf-480b-a01a-4a5a525627a5",
+      "name": "1st-2nd-Sem",
+      "updatedAt": "2026-05-09T21:41:44.083Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
-        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"a41c9921-9f76-4eca-821c-8eb11ef49d57\",\"semester\":1,\"module\":{\"name\":\"Einführung in die Programmierung\",\"ects\":3,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]",
-        "studienplan:fhnw-cs-assessment:color-mode": "standard"
+        "studienplan:fhnw-cs-assessment:color-mode": "standard",
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"fc239444-e7e1-4e99-96fa-a6afb1ad5485\",\"semester\":1,\"module\":{\"name\":\"Einführung in die Informatik\",\"ects\":6,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]"
       }
     }
   ]
