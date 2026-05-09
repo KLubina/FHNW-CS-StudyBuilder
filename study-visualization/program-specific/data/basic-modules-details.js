@@ -298,6 +298,9 @@ Die Studierenden kennen die Technik der Vektor- und Matrix-Algebra und koennen s
   "Web Engineering": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813307",
   },
+  "Web Frameworks": {
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813308",
+  },
   "Functional Programming": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9114929",
   },
