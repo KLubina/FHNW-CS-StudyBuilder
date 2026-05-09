@@ -10,5 +10,7 @@ window.StudiengangGeneralConfig = {
     <a href="https://www.fhnw.ch/de/informatik/studium/angebot/studiengaenge/informatik/module-uebersicht" target="_blank" rel="noopener">Modulübersicht</a>
     <br>
     <a href="https://www.fhnw.ch/de/informatik/studium/angebot/studiengaenge/informatik/media/modultabelle.pdf/@@display-file/file" target="_blank" rel="noopener">Modultafel Informatik</a>
+    <br>
+    <a href="https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/" target="_blank" rel="noopener">Modulübersicht FS 2026</a>
   `,
 };
