@@ -180,7 +180,7 @@ window.FHNWCSAssessmentVertiefungenData = [
   },
   {
     name: "Einführung in die Informatik",
-    ects: 3,
+    ects: 6,
     standardcategory: "Fachergänzungen",
     subcategory: "Fachergänzungen",
   },
