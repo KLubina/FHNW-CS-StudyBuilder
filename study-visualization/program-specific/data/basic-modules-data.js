@@ -4,7 +4,7 @@ window.StudiengangModules = [
   // 1. Semester
   {
     name: "Software Engineering Fundamentals",
-    ects: 3,
+    ects: 6,
     standardcategory: "Software Engineering",
     orientationRank: 1,
     year: 1,

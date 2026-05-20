@@ -25,7 +25,8 @@ window.StudiengangModuleDetails = {
       "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/mgli/drehbuch.html",
   },
   "Software Engineering Fundamentals": {
-    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813303",
+    vorlesungsmaterial:
+      "https://www.fhnw.ch/de/studium/module/9795686?show_language=de",
     kursseite: "https://swef1.pages.fhnw.ch/docs/swef-website/fs26/index.html",
     moduluebersichtseite:
       "https://sgi.pages.fhnw.ch/moduluebersicht/2026fs/swef/drehbuch.html",
