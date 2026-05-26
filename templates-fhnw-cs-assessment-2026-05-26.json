@@ -35,7 +35,7 @@
     },
     {
       "id": "f5c15794-59e0-4f89-92fc-98f9a830aaf8",
-      "name": "1st-2nd-3rd-4th-Sem (importiert)",
+      "name": "1st-2nd-3rd-4th-Sem",
       "updatedAt": "2026-05-09T22:02:35.173Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
@@ -50,7 +50,7 @@
     },
     {
       "id": "dc7bed28-680e-4439-b68a-1c61e8acd409",
-      "name": "1st-2nd-3rd-4th-5th-6th-7th-Sem (importiert)",
+      "name": "1st-2nd-3rd-4th-5th-6th-7th-Sem",
       "updatedAt": "2026-05-09T22:02:35.173Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
