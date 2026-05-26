@@ -5,7 +5,7 @@
   "templates": [
     {
       "id": "a16c4792-02a0-496e-9670-34160dfdf722",
-      "name": "1st-2nd-ohne-EIDI-chill",
+      "name": "1st-2nd-Sem-ohne-EIDI-chill",
       "updatedAt": "2026-05-26T19:11:34.431Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":2,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":1,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":2,\"Data & AI Fundation\":3,\"Programmieren 2\":2,\"System Engineering\":2,\"Lineare Algebra\":2}",
