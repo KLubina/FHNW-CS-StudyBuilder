@@ -1,22 +1,42 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-05-09T21:49:30.019Z",
+  "exportedAt": "2026-05-26T19:12:00.785Z",
   "studiengang": "fhnw-cs-assessment",
   "templates": [
     {
-      "id": "56e1ff45-2cbf-4e0e-afe4-9ce7ebc6948b",
-      "name": "1st-2nd-Sem",
-      "updatedAt": "2026-05-09T21:49:27.098Z",
+      "id": "a16c4792-02a0-496e-9670-34160dfdf722",
+      "name": "1st-2nd-ohne-EIDI-chill",
+      "updatedAt": "2026-05-26T19:11:34.431Z",
       "snapshot": {
-        "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
+        "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":2,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":1,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":2,\"Data & AI Fundation\":3,\"Programmieren 2\":2,\"System Engineering\":2,\"Lineare Algebra\":2}",
         "studienplan:fhnw-cs-assessment:color-mode": "standard",
-        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"fc239444-e7e1-4e99-96fa-a6afb1ad5485\",\"semester\":1,\"module\":{\"name\":\"Einführung in die Informatik\",\"ects\":6,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]"
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[]"
       }
     },
     {
-      "id": "b97f21f3-0bd8-416d-8318-c334a7661487",
-      "name": "1st-2nd-3rd-4th-Sem",
-      "updatedAt": "2026-05-09T22:00:52.100Z",
+      "id": "fe2f472c-7439-4037-9d96-6c090ee1203f",
+      "name": "1st-2nd-Sem-mit-EIDI",
+      "updatedAt": "2026-05-20T01:37:08.904Z",
+      "snapshot": {
+        "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":2,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":3,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"fc239444-e7e1-4e99-96fa-a6afb1ad5485\",\"semester\":1,\"module\":{\"name\":\"Einführung in die Informatik\",\"ects\":6,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]",
+        "studienplan:fhnw-cs-assessment:color-mode": "standard"
+      }
+    },
+    {
+      "id": "07e1f41d-66fd-4124-a9a8-211de582cfe5",
+      "name": "1st-2nd-Sem-ohne-EIDI",
+      "updatedAt": "2026-05-20T01:36:56.903Z",
+      "snapshot": {
+        "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":1,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":2,\"Data & AI Fundation\":2,\"Programmieren 2\":2,\"System Engineering\":2,\"Lineare Algebra\":2}",
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[]",
+        "studienplan:fhnw-cs-assessment:color-mode": "standard"
+      }
+    },
+    {
+      "id": "f5c15794-59e0-4f89-92fc-98f9a830aaf8",
+      "name": "1st-2nd-3rd-4th-Sem (importiert)",
+      "updatedAt": "2026-05-09T22:02:35.173Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
         "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Programmierung": "[{\"id\":\"366df663-bf68-4816-827a-2e0ec961fa49\",\"semester\":4,\"module\":{\"name\":\"Web Programming\",\"ects\":3,\"standardcategory\":\"Programmierung\"}},{\"id\":\"43ebfb71-1bf2-4bd3-b77e-9448646dd8c7\",\"semester\":3,\"module\":{\"name\":\"Functional Programming\",\"ects\":3,\"standardcategory\":\"Programmierung\"}}]",
@@ -29,9 +49,9 @@
       }
     },
     {
-      "id": "433cd4f5-a0ee-4e8a-b6df-a5a54b97c97e",
-      "name": "1st-2nd-3rd-4th-5th-6th-7th-Sem",
-      "updatedAt": "2026-05-09T21:59:38.010Z",
+      "id": "dc7bed28-680e-4439-b68a-1c61e8acd409",
+      "name": "1st-2nd-3rd-4th-5th-6th-7th-Sem (importiert)",
+      "updatedAt": "2026-05-09T22:02:35.173Z",
       "snapshot": {
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":1,\"User Centered Design and Requirements Engineering\":1,\"Programmieren 1\":2,\"Informationssysteme\":1,\"Mathematische Grundlagen der Informatik\":1,\"Individuelles Softwareprojekte\":3,\"Data & AI Fundation\":2,\"Programmieren 2\":3,\"System Engineering\":2,\"Lineare Algebra\":2}",
         "studienplan:fhnw-cs-assessment:wahlmodule:context-modules-data.js:Englisch": "[{\"id\":\"d078704c-bd46-4185-ac9e-7506fd47385a\",\"semester\":5,\"module\":{\"name\":\"Developing Englisch 1\",\"ects\":2,\"standardcategory\":\"Englisch\"}},{\"id\":\"d6cc7e1b-953d-45ce-b902-2fa5ec9b7512\",\"semester\":7,\"module\":{\"name\":\"Developing Englisch 2\",\"ects\":2,\"standardcategory\":\"Englisch\"}},{\"id\":\"952f5ecc-867a-4b00-9f76-72ee25b47d5b\",\"semester\":6,\"module\":{\"name\":\"Technical Englisch 1\",\"ects\":2,\"standardcategory\":\"Englisch\"}},{\"id\":\"13ecaad0-50db-40a4-a73f-77bf4520faed\",\"semester\":7,\"module\":{\"name\":\"Technical Englisch 2\",\"ects\":2,\"standardcategory\":\"Englisch\"}}]",
