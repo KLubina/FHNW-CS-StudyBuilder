@@ -120,7 +120,7 @@ window.StudiengangModuleDetails = {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/6008329",
   },
   "Algorithmen und Datenstrukturen": {
-    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9305688",
+    vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9873951",
   },
   "Einführung in die Analysis": {
     vorlesungsmaterial: "https://www.fhnw.ch/de/studium/module/9813278",
