@@ -38,19 +38,19 @@
       "name": "3rd-4th-Sem-chill",
       "updatedAt": "2026-06-10T15:56:56.712Z",
       "snapshot": {
+        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"beff9311-a71b-4076-9124-011d02447a7a\",\"semester\":3,\"module\":{\"name\":\"Web Engineering\",\"ects\":3,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]",
         "studienplan:fhnw-cs-assessment:assessments:assignments": "{\"Software Engineering Fundamentals\":null,\"User Centered Design and Requirements Engineering\":null,\"Programmieren 1\":null,\"Informationssysteme\":null,\"Mathematische Grundlagen der Informatik\":null,\"Individuelles Softwareprojekte\":null,\"Data & AI Fundation\":3,\"Programmieren 2\":null,\"System Engineering\":null,\"Lineare Algebra\":null}",
         "studienplan:fhnw-cs-assessment:wahlmodule:context-modules-data.js:Englisch": "[]",
         "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Programmierung": "[{\"id\":\"366df663-bf68-4816-827a-2e0ec961fa49\",\"semester\":4,\"module\":{\"name\":\"Web Programming\",\"ects\":3,\"standardcategory\":\"Programmierung\"}},{\"id\":\"43ebfb71-1bf2-4bd3-b77e-9448646dd8c7\",\"semester\":3,\"module\":{\"name\":\"Functional Programming\",\"ects\":3,\"standardcategory\":\"Programmierung\"}}]",
         "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Vertiefungen": "[]",
         "studienplan:fhnw-cs-assessment:projects:assignments": "{\"Projekt 1\":3,\"Projekt 2\":4,\"Projekt 3\":null,\"Projekt 4\":null,\"Projekt 5\":null,\"Bachelor-Thesis\":null}",
         "studienplan:fhnw-cs-assessment:wahlmodule:context-modules-data.js:GSW": "[]",
-        "studienplan:fhnw-cs-assessment:color-mode": "standard",
         "studienplan:fhnw-cs-assessment:wahlmodule:context-modules-data.js:BWL": "[]",
         "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Systeme": "[{\"id\":\"43ad1878-3dce-4187-9f55-1ac63547876e\",\"semester\":4,\"module\":{\"name\":\"Cloud Computing\",\"ects\":3,\"standardcategory\":\"Systeme\"}},{\"id\":\"479b290e-0adf-4ea4-8eee-95f54b8fe18f\",\"semester\":3,\"module\":{\"name\":\"Datennetze\",\"ects\":3,\"standardcategory\":\"Systeme\"}}]",
         "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Theoretische%20Grundlagen%20und%20Mathematik": "[{\"id\":\"fdfe968d-6cc2-4777-9b76-bfdcac59f302\",\"semester\":5,\"module\":{\"name\":\"Kryptologie\",\"ects\":3,\"standardcategory\":\"Theoretische Grundlagen und Mathematik\"}},{\"id\":\"290d84a5-735f-4add-9dc7-ac9b03131949\",\"semester\":4,\"module\":{\"name\":\"Einführung in die Theoretische Informatik\",\"ects\":3,\"standardcategory\":\"Theoretische Grundlagen und Mathematik\"}},{\"id\":\"b055743e-79f4-4d36-9e6b-bd2fc3435134\",\"semester\":3,\"module\":{\"name\":\"Mathematik für die Datenkommunikation\",\"ects\":3,\"standardcategory\":\"Theoretische Grundlagen und Mathematik\"}},{\"id\":\"f96d4cc6-9049-4c5b-ba57-0cbc9a58e51a\",\"semester\":4,\"module\":{\"name\":\"Algorithmen und Datenstrukturen\",\"ects\":3,\"standardcategory\":\"Theoretische Grundlagen und Mathematik\"}}]",
-        "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Software%20Engineering": "[{\"id\":\"656abe43-8681-44c4-932b-b84877b6928d\",\"semester\":4,\"module\":{\"name\":\"Design Patterns\",\"ects\":3,\"standardcategory\":\"Software Engineering\"}},{\"id\":\"a562f228-1fb1-4480-9985-d465c2963a3b\",\"semester\":4,\"module\":{\"name\":\"Software Architektur\",\"ects\":3,\"standardcategory\":\"Software Engineering\"}}]",
+        "studienplan:fhnw-cs-assessment:wahlmodule:wahlmodule-data.js:Software%20Engineering": "[{\"id\":\"656abe43-8681-44c4-932b-b84877b6928d\",\"semester\":4,\"module\":{\"name\":\"Design Patterns\",\"ects\":3,\"standardcategory\":\"Software Engineering\"}},{\"id\":\"c08c444a-09f3-4c74-bc28-0037ae5f2137\",\"semester\":4,\"module\":{\"name\":\"Verteilte Systeme\",\"ects\":3,\"standardcategory\":\"Software Engineering\"}}]",
         "studienplan:fhnw-cs-assessment:wahlmodule:context-modules-data.js:Kommunikation": "[]",
-        "studienplan:fhnw-cs-assessment:wahlmodule:vertiefungen-data.js:Facherg%C3%A4nzungen": "[{\"id\":\"beff9311-a71b-4076-9124-011d02447a7a\",\"semester\":3,\"module\":{\"name\":\"Web Engineering\",\"ects\":3,\"standardcategory\":\"Fachergänzungen\",\"subcategory\":\"Fachergänzungen\"}}]"
+        "studienplan:fhnw-cs-assessment:color-mode": "standard"
       }
     },
     {
