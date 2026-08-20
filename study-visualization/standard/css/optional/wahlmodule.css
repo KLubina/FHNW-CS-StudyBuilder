@@ -430,6 +430,56 @@
   flex: 0 1 220px;
 }
 
+.studyplan-assigned-module {
+  position: relative;
+  justify-content: flex-start;
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+.studyplan-inline-assignment-control {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 6px;
+  pointer-events: auto;
+}
+
+.studyplan-inline-assignment-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #f8fafc;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+.studyplan-inline-assignment-select {
+  min-width: 56px;
+  max-width: 70px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 5px;
+}
+
+.studyplan-inline-assignment-select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3);
+}
+
 .wahlmodule-bereich {
   margin-top: 28px;
   padding: 24px 0 8px;

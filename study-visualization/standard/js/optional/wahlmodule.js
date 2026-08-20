@@ -557,6 +557,13 @@ window.StudienplanWahlmodule = {
         if (!moduleElement) return;
 
         moduleElement.classList.add("studyplan-assigned-module");
+        this.attachStudyPlanInlineAssignmentControl(moduleElement, {
+          assignmentKind: "wahlmodul",
+          semester: assignment.semester,
+          source,
+          category,
+          assignmentId: assignment.id,
+        });
         semesterContainer.appendChild(moduleElement);
       });
     });
@@ -591,6 +598,11 @@ window.StudienplanWahlmodule = {
         "studyplan-assigned-module",
         "project-assigned-module",
       );
+      this.attachStudyPlanInlineAssignmentControl(moduleElement, {
+        assignmentKind: "project",
+        semester: assignedSemester,
+        projectName: projectModule.name,
+      });
       semesterContainer.appendChild(moduleElement);
     });
 
@@ -625,8 +637,76 @@ window.StudienplanWahlmodule = {
         "studyplan-assigned-module",
         "assessment-assigned-module",
       );
+      this.attachStudyPlanInlineAssignmentControl(moduleElement, {
+        assignmentKind: "assessment",
+        semester: assignedSemester,
+        assessmentName: assessmentModule.name,
+      });
       semesterContainer.appendChild(moduleElement);
     });
+  },
+
+  renderSemesterOptionElements(selectedSemester) {
+    return Array.from({ length: 12 }, (_, index) => {
+      const semesterNumber = index + 1;
+      const selectedAttr =
+        selectedSemester === semesterNumber ? "selected" : "";
+      return `<option value="${semesterNumber}" ${selectedAttr}>S${semesterNumber}</option>`;
+    }).join("");
+  },
+
+  attachStudyPlanInlineAssignmentControl(moduleElement, assignmentMeta) {
+    if (!moduleElement || !assignmentMeta) return;
+
+    const semester = this.normalizeSemester(assignmentMeta.semester);
+    if (!semester) return;
+
+    const assignmentKind = String(assignmentMeta.assignmentKind || "");
+    if (!assignmentKind) return;
+
+    const source = this.escapeHtml(assignmentMeta.source || "");
+    const category = this.escapeHtml(assignmentMeta.category || "");
+    const assignmentId = this.escapeHtml(assignmentMeta.assignmentId || "");
+    const projectName = this.escapeHtml(assignmentMeta.projectName || "");
+    const assessmentName = this.escapeHtml(assignmentMeta.assessmentName || "");
+
+    const control = document.createElement("div");
+    control.className = "studyplan-inline-assignment-control";
+    control.innerHTML = `
+      <label class="studyplan-inline-assignment-label" title="Semester direkt auf dem Modul ändern">
+        Zuteilung
+        <select
+          class="studyplan-inline-assignment-select"
+          data-action="assign-semester-inline"
+          data-assignment-kind="${assignmentKind}"
+          data-wahlmodul-source="${source}"
+          data-wahlmodul-category="${category}"
+          data-assignment-id="${assignmentId}"
+          data-project-name="${projectName}"
+          data-assessment-name="${assessmentName}"
+        >
+          <option value="">-</option>
+          ${this.renderSemesterOptionElements(semester)}
+        </select>
+      </label>
+    `;
+
+    // Platz für die zusätzliche Zuteilungs-Bar schaffen, ohne Breite/Originalstil zu ändern.
+    if (!moduleElement.dataset.inlineAssignmentSized) {
+      const inlineHeight = Number.parseFloat(moduleElement.style.height || "");
+      const measuredHeight = moduleElement.getBoundingClientRect().height;
+      const baseHeight = Number.isFinite(inlineHeight)
+        ? inlineHeight
+        : measuredHeight;
+
+      if (baseHeight > 0) {
+        moduleElement.style.height = `${Math.round(baseHeight + 30)}px`;
+      }
+
+      moduleElement.dataset.inlineAssignmentSized = "1";
+    }
+
+    moduleElement.appendChild(control);
   },
 
   findAssignment(source, category, assignmentId) {
@@ -682,6 +762,47 @@ window.StudienplanWahlmodule = {
     });
 
     document.addEventListener("change", (e) => {
+      const inlineAssignSelect = e.target.closest(
+        "select[data-action='assign-semester-inline']",
+      );
+      if (inlineAssignSelect) {
+        const assignmentKind = inlineAssignSelect.getAttribute(
+          "data-assignment-kind",
+        );
+        const selectedValue = inlineAssignSelect.value;
+        const semester = selectedValue ? Number(selectedValue) : null;
+
+        if (assignmentKind === "wahlmodul") {
+          const source =
+            inlineAssignSelect.getAttribute("data-wahlmodul-source") || "";
+          const category =
+            inlineAssignSelect.getAttribute("data-wahlmodul-category") || "";
+          const assignmentId =
+            inlineAssignSelect.getAttribute("data-assignment-id") || "";
+          this.updateAssignmentSemester(
+            source,
+            category,
+            assignmentId,
+            semester,
+          );
+          return;
+        }
+
+        if (assignmentKind === "project") {
+          const projectName =
+            inlineAssignSelect.getAttribute("data-project-name") || "";
+          this.updateProjectAssignment(projectName, semester);
+          return;
+        }
+
+        if (assignmentKind === "assessment") {
+          const assessmentName =
+            inlineAssignSelect.getAttribute("data-assessment-name") || "";
+          this.updateAssessmentAssignment(assessmentName, semester);
+          return;
+        }
+      }
+
       const projectAssignSelect = e.target.closest(
         "select[data-action='assign-project-semester']",
       );
