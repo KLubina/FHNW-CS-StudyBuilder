@@ -51,7 +51,7 @@ window.StudiengangModules = [
   // 2. Semester
   {
     name: "Individuelles Softwareprojekte",
-    ects: 6,
+    ects: 3,
     standardcategory: "Fachergänzungen",
     orientationRank: 1,
     year: 1,
