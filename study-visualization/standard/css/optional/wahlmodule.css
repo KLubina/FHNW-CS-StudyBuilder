@@ -364,18 +364,9 @@
 }
 
 .wahlmodul-semester-select-wrapper {
-  margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.wahlmodul-semester-select-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .wahlmodul-semester-select {
@@ -441,6 +432,8 @@
   margin-top: auto;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 3px;
   justify-content: center;
   align-items: center;
   padding-top: 6px;
@@ -448,8 +441,11 @@
 }
 
 .studyplan-inline-assignment-label {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   padding: 3px 8px;
   border-radius: 999px;
@@ -463,8 +459,9 @@
 }
 
 .studyplan-inline-assignment-select {
-  min-width: 56px;
-  max-width: 70px;
+  width: 52px;
+  min-width: 0;
+  max-width: 52px;
   border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.95);

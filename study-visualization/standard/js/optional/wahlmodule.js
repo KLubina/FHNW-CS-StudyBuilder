@@ -67,7 +67,9 @@ window.StudienplanWahlmodule = {
 
       const normalized = {};
       Object.keys(parsed).forEach((projectName) => {
-        normalized[projectName] = this.normalizeSemester(parsed[projectName]);
+        normalized[projectName] = this.normalizeAssignmentPair(
+          parsed[projectName],
+        );
       });
 
       return normalized;
@@ -95,41 +97,19 @@ window.StudienplanWahlmodule = {
     );
   },
 
-  renderProjectAssignmentCard(module, assignedSemester) {
+  renderProjectAssignmentCard(module, assignment) {
     const moduleForRender = {
       ...module,
       standardcategory: this.resolveCategoryClass(module.standardcategory),
     };
     const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-    const selectId = `project-semester-${this.escapeHtml(module.name)}`;
-    const semesterLabel =
-      assignedSemester == null
-        ? "Noch nicht zugewiesen"
-        : `Semester ${assignedSemester}`;
-    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
-      const semesterNumber = index + 1;
-      const selectedAttr =
-        assignedSemester === semesterNumber ? "selected" : "";
-      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
-    }).join("");
+    const assignmentPair = this.normalizeAssignmentPair(assignment);
 
     return `
       <div class="projekt-assignment-card" data-project-name="${this.escapeHtml(module.name)}">
         ${moduleHTML}
         <div class="projekt-assignment-actions">
-          <div class="projekt-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
-          <div class="projekt-semester-select-wrapper">
-            <label class="projekt-semester-select-label" for="${selectId}">Semester zuweisen</label>
-            <select
-              id="${selectId}"
-              class="projekt-semester-select"
-              data-action="assign-project-semester"
-              data-project-name="${this.escapeHtml(module.name)}"
-            >
-              <option value="">Nicht zugewiesen</option>
-              ${semesterOptions}
-            </select>
-          </div>
+          ${this.renderAssignmentSelectors("project", "assign-project-semester", "data-project-name", module.name, assignmentPair)}
         </div>
       </div>
     `;
@@ -150,15 +130,17 @@ window.StudienplanWahlmodule = {
       .map((module) =>
         this.renderProjectAssignmentCard(
           module,
-          this.normalizeSemester(projectAssignments[module.name]),
+          projectAssignments[module.name],
         ),
       )
       .join("");
   },
 
-  updateProjectAssignment(projectName, semester) {
+  updateProjectAssignment(projectName, semester, slot = "first") {
     const assignments = this.loadPersistedProjectAssignments();
-    assignments[projectName] = this.normalizeSemester(semester);
+    const assignment = this.normalizeAssignmentPair(assignments[projectName]);
+    assignment[slot] = this.normalizeSemester(semester);
+    assignments[projectName] = assignment;
     this.savePersistedProjectAssignments(assignments);
     this.refreshWahlmoduleViews();
   },
@@ -185,7 +167,7 @@ window.StudienplanWahlmodule = {
 
       const normalized = {};
       Object.keys(parsed).forEach((name) => {
-        normalized[name] = this.normalizeSemester(parsed[name]);
+        normalized[name] = this.normalizeAssignmentPair(parsed[name]);
       });
 
       return normalized;
@@ -215,41 +197,19 @@ window.StudienplanWahlmodule = {
     );
   },
 
-  renderAssessmentAssignmentCard(module, assignedSemester) {
+  renderAssessmentAssignmentCard(module, assignment) {
     const moduleForRender = {
       ...module,
       standardcategory: this.resolveCategoryClass(module.standardcategory),
     };
     const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-    const selectId = `assessment-semester-${this.escapeHtml(module.name)}`;
-    const semesterLabel =
-      assignedSemester == null
-        ? "Noch nicht zugewiesen"
-        : `Semester ${assignedSemester}`;
-    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
-      const semesterNumber = index + 1;
-      const selectedAttr =
-        assignedSemester === semesterNumber ? "selected" : "";
-      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
-    }).join("");
+    const assignmentPair = this.normalizeAssignmentPair(assignment);
 
     return `
       <div class="assessment-assignment-card" data-assessment-name="${this.escapeHtml(module.name)}">
         ${moduleHTML}
         <div class="assessment-assignment-actions">
-          <div class="assessment-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
-          <div class="assessment-semester-select-wrapper">
-            <label class="assessment-semester-select-label" for="${selectId}">Semester zuweisen</label>
-            <select
-              id="${selectId}"
-              class="assessment-semester-select"
-              data-action="assign-assessment-semester"
-              data-assessment-name="${this.escapeHtml(module.name)}"
-            >
-              <option value="">Nicht zugewiesen</option>
-              ${semesterOptions}
-            </select>
-          </div>
+          ${this.renderAssignmentSelectors("assessment", "assign-assessment-semester", "data-assessment-name", module.name, assignmentPair)}
         </div>
       </div>
     `;
@@ -270,15 +230,17 @@ window.StudienplanWahlmodule = {
       .map((module) =>
         this.renderAssessmentAssignmentCard(
           module,
-          this.normalizeSemester(assessmentAssignments[module.name]),
+          assessmentAssignments[module.name],
         ),
       )
       .join("");
   },
 
-  updateAssessmentAssignment(assessmentName, semester) {
+  updateAssessmentAssignment(assessmentName, semester, slot = "first") {
     const assignments = this.loadPersistedAssessmentAssignments();
-    assignments[assessmentName] = this.normalizeSemester(semester);
+    const assignment = this.normalizeAssignmentPair(assignments[assessmentName]);
+    assignment[slot] = this.normalizeSemester(semester);
+    assignments[assessmentName] = assignment;
     this.savePersistedAssessmentAssignments(assignments);
     this.refreshWahlmoduleViews();
   },
@@ -298,6 +260,61 @@ window.StudienplanWahlmodule = {
     }
 
     return numberValue;
+  },
+
+  normalizeAssignmentPair(value) {
+    const isObject = value && typeof value === "object";
+    return {
+      first: this.normalizeSemester(
+        isObject ? (value.first ?? value.semester) : value,
+      ),
+      second: this.normalizeSemester(
+        isObject ? (value.second ?? value.semester2) : null,
+      ),
+    };
+  },
+
+  renderAssignmentSelectors(
+    prefix,
+    action,
+    nameAttribute,
+    moduleName,
+    assignment,
+  ) {
+    const pair = this.normalizeAssignmentPair(assignment);
+    const escapedName = this.escapeHtml(moduleName);
+    const selectors = [
+      { slot: "first", label: "1. Zuteilung", value: pair.first },
+      { slot: "second", label: "2. Zuteilung (optional)", value: pair.second },
+    ];
+
+    return selectors
+      .map(({ slot, label, value }) => {
+        const selectId = `${prefix}-semester-${slot}-${escapedName}`;
+        const semesterOptions = Array.from({ length: 12 }, (_, index) => {
+          const semesterNumber = index + 1;
+          const selectedAttr = value === semesterNumber ? "selected" : "";
+          return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
+        }).join("");
+
+        return `
+          <div class="${prefix}-semester-select-wrapper">
+            <select
+              id="${selectId}"
+              class="${prefix}-semester-select"
+              data-action="${action}"
+              data-assignment-slot="${slot}"
+              ${nameAttribute}="${escapedName}"
+              aria-label="${this.escapeHtml(label)}"
+              title="${this.escapeHtml(label)}"
+            >
+              <option value="">Nicht zugewiesen</option>
+              ${semesterOptions}
+            </select>
+          </div>
+        `;
+      })
+      .join("");
   },
 
   getModuleIdentity(module) {
@@ -326,6 +343,7 @@ window.StudienplanWahlmodule = {
     return {
       id: entry.id || this.createAssignmentId(),
       semester: this.normalizeSemester(entry.semester),
+      semester2: this.normalizeSemester(entry.semester2 ?? entry.second),
       module: { ...module },
     };
   },
@@ -362,6 +380,11 @@ window.StudienplanWahlmodule = {
             this.createAssignmentId(),
           semester: this.normalizeSemester(
             moduleEntry?.semester ?? existingAssignment?.semester,
+          ),
+          semester2: this.normalizeSemester(
+            moduleEntry?.semester2 ??
+              moduleEntry?.second ??
+              existingAssignment?.semester2,
           ),
           module: { ...module },
         };
@@ -432,17 +455,30 @@ window.StudienplanWahlmodule = {
         assignment.module.standardcategory,
       ),
     };
-    const semesterLabel =
-      assignment.semester == null
-        ? "Noch nicht zugewiesen"
-        : `Semester ${assignment.semester}`;
-    const selectId = `semester-select-${assignment.id}`;
-    const semesterOptions = Array.from({ length: 12 }, (_, index) => {
-      const semesterNumber = index + 1;
-      const selectedAttr =
-        assignment.semester === semesterNumber ? "selected" : "";
-      return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
-    }).join("");
+    const renderSemesterSelect = (slot, value) => {
+      const selectId = `semester-select-${assignment.id}-${slot}`;
+      const semesterOptions = Array.from({ length: 12 }, (_, index) => {
+        const semesterNumber = index + 1;
+        const selectedAttr = value === semesterNumber ? "selected" : "";
+        return `<option value="${semesterNumber}" ${selectedAttr}>Semester ${semesterNumber}</option>`;
+      }).join("");
+
+      return `
+        <div class="wahlmodul-semester-select-wrapper">
+          <select
+            id="${selectId}"
+            class="wahlmodul-semester-select"
+            data-action="assign-semester-select"
+            data-assignment-slot="${slot}"
+            aria-label="${slot === "second" ? "Wiederholung" : "Erste Zuteilung"}"
+            title="${slot === "second" ? "Wiederholung (optional)" : "Erste Zuteilung"}"
+          >
+            <option value="">Nicht zugewiesen</option>
+            ${semesterOptions}
+          </select>
+        </div>
+      `;
+    };
 
     const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
 
@@ -450,18 +486,8 @@ window.StudienplanWahlmodule = {
       <div class="wahlmodul-assignment-card ${mode === "plan" ? "is-plan-card" : "is-selection-card"}" data-assignment-id="${this.escapeHtml(assignment.id)}" data-assignment-semester="${assignment.semester == null ? "" : assignment.semester}" data-wahlmodul-source="${this.escapeHtml(source)}" data-wahlmodul-category="${this.escapeHtml(category)}">
         ${moduleHTML}
         <div class="wahlmodul-assignment-actions">
-          <div class="wahlmodul-assignment-semester">${this.escapeHtml(semesterLabel)}</div>
-          <div class="wahlmodul-semester-select-wrapper">
-            <label class="wahlmodul-semester-select-label" for="${this.escapeHtml(selectId)}">Semester zuweisen</label>
-            <select
-              id="${this.escapeHtml(selectId)}"
-              class="wahlmodul-semester-select"
-              data-action="assign-semester-select"
-            >
-              <option value="">Nicht zugewiesen</option>
-              ${semesterOptions}
-            </select>
-          </div>
+          ${renderSemesterSelect("first", assignment.semester)}
+          ${renderSemesterSelect("second", assignment.semester2)}
           <div class="wahlmodul-assignment-buttons">
             <button type="button" class="wahlmodul-assignment-button is-secondary" data-action="remove-assignment">Entfernen</button>
           </div>
@@ -517,6 +543,31 @@ window.StudienplanWahlmodule = {
     });
   },
 
+  appendAssignedModule(module, semester, meta, container) {
+    const normalizedSemester = this.normalizeSemester(semester);
+    if (!normalizedSemester || !container) return;
+
+    const moduleForRender = {
+      ...module,
+      standardcategory: this.resolveCategoryClass(module.standardcategory),
+    };
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = moduleHTML;
+    const moduleElement = tempDiv.firstElementChild;
+    if (!moduleElement) return;
+
+    moduleElement.classList.add(
+      "studyplan-assigned-module",
+      ...(meta.classNames || []),
+    );
+    this.attachStudyPlanInlineAssignmentControl(moduleElement, {
+      ...meta,
+      semester: normalizedSemester,
+    });
+    container.appendChild(moduleElement);
+  },
+
   renderStudyPlanAssignments() {
     document
       .querySelectorAll(".module-container .studyplan-assigned-module")
@@ -533,116 +584,89 @@ window.StudienplanWahlmodule = {
       const assignments = this.getPersistedAssignments(source, category);
 
       assignments.forEach((assignment) => {
-        if (!assignment.semester) return;
-        const year = Math.ceil(assignment.semester / 2);
-        const semesterInYear = assignment.semester % 2 === 1 ? 1 : 2;
-        const semesterContainer = document.querySelector(
-          `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
-        );
+        [
+          { semester: assignment.semester, slot: "first" },
+          { semester: assignment.semester2, slot: "second" },
+        ].forEach(({ semester, slot }) => {
+          if (!semester) return;
+          const year = Math.ceil(semester / 2);
+          const semesterInYear = semester % 2 === 1 ? 1 : 2;
+          const semesterContainer = document.querySelector(
+            `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+          );
 
-        if (!semesterContainer) return;
-
-        const moduleForRender = {
-          ...assignment.module,
-          standardcategory: this.resolveCategoryClass(
-            assignment.module.standardcategory,
-          ),
-        };
-
-        const moduleHTML =
-          window.StudienplanModule.renderModule(moduleForRender);
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = moduleHTML;
-        const moduleElement = tempDiv.firstElementChild;
-        if (!moduleElement) return;
-
-        moduleElement.classList.add("studyplan-assigned-module");
-        this.attachStudyPlanInlineAssignmentControl(moduleElement, {
-          assignmentKind: "wahlmodul",
-          semester: assignment.semester,
-          source,
-          category,
-          assignmentId: assignment.id,
+          this.appendAssignedModule(
+            assignment.module,
+            semester,
+            {
+              assignmentKind: "wahlmodul",
+              source,
+              category,
+              assignmentId: assignment.id,
+              assignmentSlot: slot,
+              classNames: [],
+            },
+            semesterContainer,
+          );
         });
-        semesterContainer.appendChild(moduleElement);
       });
     });
 
     const projectAssignments = this.loadPersistedProjectAssignments();
     this.getProjectModules().forEach((projectModule) => {
-      const assignedSemester = this.normalizeSemester(
+      const assignment = this.normalizeAssignmentPair(
         projectAssignments[projectModule.name],
       );
-      if (!assignedSemester) return;
-
-      const year = Math.ceil(assignedSemester / 2);
-      const semesterInYear = assignedSemester % 2 === 1 ? 1 : 2;
-      const semesterContainer = document.querySelector(
-        `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
-      );
-      if (!semesterContainer) return;
-
-      const moduleForRender = {
-        ...projectModule,
-        standardcategory: this.resolveCategoryClass(
-          projectModule.standardcategory,
-        ),
-      };
-      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = moduleHTML;
-      const moduleElement = tempDiv.firstElementChild;
-      if (!moduleElement) return;
-
-      moduleElement.classList.add(
-        "studyplan-assigned-module",
-        "project-assigned-module",
-      );
-      this.attachStudyPlanInlineAssignmentControl(moduleElement, {
-        assignmentKind: "project",
-        semester: assignedSemester,
-        projectName: projectModule.name,
+      [
+        { semester: assignment.first, slot: "first" },
+        { semester: assignment.second, slot: "second" },
+      ].forEach(({ semester, slot }) => {
+        const year = Math.ceil(semester / 2);
+        const semesterInYear = semester % 2 === 1 ? 1 : 2;
+        const semesterContainer = document.querySelector(
+          `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+        );
+        this.appendAssignedModule(
+          projectModule,
+          semester,
+          {
+            assignmentKind: "project",
+            projectName: projectModule.name,
+            assignmentSlot: slot,
+            classNames: ["project-assigned-module"],
+          },
+          semesterContainer,
+        );
       });
-      semesterContainer.appendChild(moduleElement);
     });
 
     // Assessment-Module einfügen (falls zugewiesen)
     const assessmentAssignments = this.loadPersistedAssessmentAssignments();
     this.getAssessmentModules().forEach((assessmentModule) => {
-      const assignedSemester = this.normalizeSemester(
+      const assignment = this.normalizeAssignmentPair(
         assessmentAssignments[assessmentModule.name],
       );
-      if (!assignedSemester) return;
-
-      const year = Math.ceil(assignedSemester / 2);
-      const semesterInYear = assignedSemester % 2 === 1 ? 1 : 2;
-      const semesterContainer = document.querySelector(
-        `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
-      );
-      if (!semesterContainer) return;
-
-      const moduleForRender = {
-        ...assessmentModule,
-        standardcategory: this.resolveCategoryClass(
-          assessmentModule.standardcategory,
-        ),
-      };
-      const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = moduleHTML;
-      const moduleElement = tempDiv.firstElementChild;
-      if (!moduleElement) return;
-
-      moduleElement.classList.add(
-        "studyplan-assigned-module",
-        "assessment-assigned-module",
-      );
-      this.attachStudyPlanInlineAssignmentControl(moduleElement, {
-        assignmentKind: "assessment",
-        semester: assignedSemester,
-        assessmentName: assessmentModule.name,
+      [
+        { semester: assignment.first, slot: "first" },
+        { semester: assignment.second, slot: "second" },
+      ].forEach(({ semester, slot }) => {
+        const year = Math.ceil(semester / 2);
+        const semesterInYear = semester % 2 === 1 ? 1 : 2;
+        const semesterContainer = document.querySelector(
+          `.semester[data-year="${year}"][data-semester="${semesterInYear}"] .module-container`,
+        );
+        this.appendAssignedModule(
+          assessmentModule,
+          semester,
+          {
+            assignmentKind: "assessment",
+            assessmentName: assessmentModule.name,
+            assignmentSlot: slot,
+            classNames: ["assessment-assigned-module"],
+          },
+          semesterContainer,
+        );
       });
-      semesterContainer.appendChild(moduleElement);
     });
   },
 
@@ -667,29 +691,75 @@ window.StudienplanWahlmodule = {
     const source = this.escapeHtml(assignmentMeta.source || "");
     const category = this.escapeHtml(assignmentMeta.category || "");
     const assignmentId = this.escapeHtml(assignmentMeta.assignmentId || "");
+    const assignmentSlot = this.escapeHtml(
+      assignmentMeta.assignmentSlot || "first",
+    );
     const projectName = this.escapeHtml(assignmentMeta.projectName || "");
     const assessmentName = this.escapeHtml(assignmentMeta.assessmentName || "");
+    const hasSecondAssignment = ["wahlmodul", "project", "assessment"].includes(
+      assignmentKind,
+    );
+    const assignmentPair = hasSecondAssignment
+      ? this.normalizeAssignmentPair(
+          assignmentKind === "wahlmodul"
+            ? this.findAssignment(
+                assignmentMeta.source,
+                assignmentMeta.category,
+                assignmentMeta.assignmentId,
+              )
+            : assignmentKind === "project"
+              ? this.loadPersistedProjectAssignments()[
+                  assignmentMeta.projectName
+                ]
+              : this.loadPersistedAssessmentAssignments()[
+                  assignmentMeta.assessmentName
+                ],
+        )
+      : { first: semester, second: null };
+    if (hasSecondAssignment && assignmentKind === "wahlmodul") {
+      assignmentPair.first = this.normalizeSemester(
+        assignmentPair.first ?? semester,
+      );
+    }
+    const assignmentNameAttribute =
+      assignmentKind === "project"
+        ? `data-project-name="${projectName}"`
+        : `data-assessment-name="${assessmentName}"`;
+    const inlineAssignmentControls = [
+      { slot: "first", value: assignmentPair.first },
+      ...(hasSecondAssignment
+        ? [
+            {
+              slot: "second",
+              value: assignmentPair.second,
+            },
+          ]
+        : []),
+    ]
+      .map(
+        ({ slot, value }) => `
+          <label class="studyplan-inline-assignment-label" title="${slot === "second" ? "Wiederholung (optional)" : "Erste Zuteilung"}">
+            <select
+              class="studyplan-inline-assignment-select"
+              data-action="assign-semester-inline"
+              data-assignment-kind="${assignmentKind}"
+              data-wahlmodul-source="${source}"
+              data-wahlmodul-category="${category}"
+              data-assignment-id="${assignmentId}"
+              data-assignment-slot="${slot}"
+              ${assignmentNameAttribute}
+            >
+              <option value="">-</option>
+              ${this.renderSemesterOptionElements(value)}
+            </select>
+          </label>
+        `,
+      )
+      .join("");
 
     const control = document.createElement("div");
     control.className = "studyplan-inline-assignment-control";
-    control.innerHTML = `
-      <label class="studyplan-inline-assignment-label" title="Semester direkt auf dem Modul ändern">
-        Zuteilung
-        <select
-          class="studyplan-inline-assignment-select"
-          data-action="assign-semester-inline"
-          data-assignment-kind="${assignmentKind}"
-          data-wahlmodul-source="${source}"
-          data-wahlmodul-category="${category}"
-          data-assignment-id="${assignmentId}"
-          data-project-name="${projectName}"
-          data-assessment-name="${assessmentName}"
-        >
-          <option value="">-</option>
-          ${this.renderSemesterOptionElements(semester)}
-        </select>
-      </label>
-    `;
+    control.innerHTML = inlineAssignmentControls;
 
     // Platz für die zusätzliche Zuteilungs-Bar schaffen, ohne Breite/Originalstil zu ändern.
     if (!moduleElement.dataset.inlineAssignmentSized) {
@@ -700,7 +770,8 @@ window.StudienplanWahlmodule = {
         : measuredHeight;
 
       if (baseHeight > 0) {
-        moduleElement.style.height = `${Math.round(baseHeight + 30)}px`;
+        const controlHeight = hasSecondAssignment ? 58 : 30;
+        moduleElement.style.height = `${Math.round(baseHeight + controlHeight)}px`;
       }
 
       moduleElement.dataset.inlineAssignmentSized = "1";
@@ -716,11 +787,21 @@ window.StudienplanWahlmodule = {
     );
   },
 
-  updateAssignmentSemester(source, category, assignmentId, semester) {
+  updateAssignmentSemester(
+    source,
+    category,
+    assignmentId,
+    semester,
+    slot = "first",
+  ) {
     const assignments = this.getPersistedAssignments(source, category);
     const updatedAssignments = assignments.map((assignment) =>
       assignment.id === assignmentId
-        ? { ...assignment, semester: this.normalizeSemester(semester) }
+        ? {
+            ...assignment,
+            [slot === "second" ? "semester2" : "semester"]:
+              this.normalizeSemester(semester),
+          }
         : assignment,
     );
 
@@ -779,11 +860,14 @@ window.StudienplanWahlmodule = {
             inlineAssignSelect.getAttribute("data-wahlmodul-category") || "";
           const assignmentId =
             inlineAssignSelect.getAttribute("data-assignment-id") || "";
+          const slot =
+            inlineAssignSelect.getAttribute("data-assignment-slot") || "first";
           this.updateAssignmentSemester(
             source,
             category,
             assignmentId,
             semester,
+            slot,
           );
           return;
         }
@@ -791,14 +875,18 @@ window.StudienplanWahlmodule = {
         if (assignmentKind === "project") {
           const projectName =
             inlineAssignSelect.getAttribute("data-project-name") || "";
-          this.updateProjectAssignment(projectName, semester);
+          const slot =
+            inlineAssignSelect.getAttribute("data-assignment-slot") || "first";
+          this.updateProjectAssignment(projectName, semester, slot);
           return;
         }
 
         if (assignmentKind === "assessment") {
           const assessmentName =
             inlineAssignSelect.getAttribute("data-assessment-name") || "";
-          this.updateAssessmentAssignment(assessmentName, semester);
+          const slot =
+            inlineAssignSelect.getAttribute("data-assignment-slot") || "first";
+          this.updateAssessmentAssignment(assessmentName, semester, slot);
           return;
         }
       }
@@ -811,7 +899,8 @@ window.StudienplanWahlmodule = {
           projectAssignSelect.getAttribute("data-project-name");
         const selectedValue = projectAssignSelect.value;
         const semester = selectedValue ? Number(selectedValue) : null;
-        this.updateProjectAssignment(projectName, semester);
+        const slot = projectAssignSelect.getAttribute("data-assignment-slot") || "first";
+        this.updateProjectAssignment(projectName, semester, slot);
         return;
       }
 
@@ -824,7 +913,9 @@ window.StudienplanWahlmodule = {
         );
         const selectedValue = assessmentAssignSelect.value;
         const semester = selectedValue ? Number(selectedValue) : null;
-        this.updateAssessmentAssignment(assessmentName, semester);
+        const slot =
+          assessmentAssignSelect.getAttribute("data-assignment-slot") || "first";
+        this.updateAssessmentAssignment(assessmentName, semester, slot);
         return;
       }
 
@@ -842,7 +933,14 @@ window.StudienplanWahlmodule = {
       const assignmentId = assignmentCard.getAttribute("data-assignment-id");
       const selectedValue = assignSelect.value;
       const semester = selectedValue ? Number(selectedValue) : null;
-      this.updateAssignmentSemester(source, category, assignmentId, semester);
+      const slot = assignSelect.getAttribute("data-assignment-slot") || "first";
+      this.updateAssignmentSemester(
+        source,
+        category,
+        assignmentId,
+        semester,
+        slot,
+      );
     });
 
     document.addEventListener("click", (e) => {
