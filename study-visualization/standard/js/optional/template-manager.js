@@ -218,6 +218,7 @@ window.StudienplanTemplateManager = {
           <button type="button" class="template-manager__button" data-action="template-export" ${templates.length === 0 ? "disabled" : ""}>Exportieren</button>
           <button type="button" class="template-manager__button" data-action="template-import">Importieren</button>
           <button type="button" class="template-manager__button template-manager__button--danger" data-action="template-delete" ${templates.length === 0 ? "disabled" : ""}>Löschen</button>
+          <button type="button" class="template-manager__button template-manager__button--danger" data-action="template-delete-all" ${templates.length === 0 ? "disabled" : ""}>Alle löschen</button>
         </div>
       </div>
     `;
@@ -398,6 +399,23 @@ window.StudienplanTemplateManager = {
     this.setSelectedTemplateId(updatedTemplates[0]?.id || "");
   },
 
+  deleteAllTemplates() {
+    const templates = this.getTemplates();
+    if (templates.length === 0) {
+      window.alert("Es gibt keine Templates zum Löschen.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `Wirklich alle ${templates.length} Templates löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.`,
+    );
+    if (!confirmDelete) return;
+
+    this.saveTemplates([]);
+    this.renderTemplateManager();
+    this.setSelectedTemplateId("");
+  },
+
   exportTemplates() {
     const templates = this.getTemplates();
     if (templates.length === 0) {
@@ -560,6 +578,12 @@ window.StudienplanTemplateManager = {
       if (action === "template-delete") {
         event.preventDefault();
         this.deleteSelectedTemplate();
+        return;
+      }
+
+      if (action === "template-delete-all") {
+        event.preventDefault();
+        this.deleteAllTemplates();
         return;
       }
 
