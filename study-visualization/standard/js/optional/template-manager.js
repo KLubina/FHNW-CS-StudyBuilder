@@ -33,6 +33,10 @@ window.StudienplanTemplateManager = {
     return `${this.getStorageNamespace()}:templates`;
   },
 
+  getModuleStatusStorageKey() {
+    return "fhnw-cs-assessment-module-status";
+  },
+
   createTemplateId() {
     if (window.crypto?.randomUUID) {
       return window.crypto.randomUUID();
@@ -96,6 +100,7 @@ window.StudienplanTemplateManager = {
     const snapshot = {};
     const prefix = this.getStatePrefix();
     const registryKey = this.getTemplatesStorageKey();
+    const moduleStatusKey = this.getModuleStatusStorageKey();
 
     for (let index = 0; index < window.localStorage.length; index += 1) {
       const key = window.localStorage.key(index);
@@ -109,12 +114,18 @@ window.StudienplanTemplateManager = {
       }
     }
 
+    const moduleStatuses = window.localStorage.getItem(moduleStatusKey);
+    if (moduleStatuses !== null) {
+      snapshot[moduleStatusKey] = moduleStatuses;
+    }
+
     return snapshot;
   },
 
   clearStateSnapshot() {
     const prefix = this.getStatePrefix();
     const registryKey = this.getTemplatesStorageKey();
+    const moduleStatusKey = this.getModuleStatusStorageKey();
     const keysToRemove = [];
 
     for (let index = 0; index < window.localStorage.length; index += 1) {
@@ -127,6 +138,7 @@ window.StudienplanTemplateManager = {
     }
 
     keysToRemove.forEach((key) => window.localStorage.removeItem(key));
+    window.localStorage.removeItem(moduleStatusKey);
   },
 
   applyStateSnapshot(snapshot) {
