@@ -202,7 +202,7 @@ window.StudienplanModule = {
     const name = module.name || "Unbekanntes Modul";
 
     // Berechne Größe basierend auf ECTS (4 ECTS = 100px)
-    const baseSize = 100;
+    const baseSize = 180;
     const sizeEcts = baseEcts > 0 ? baseEcts : 4;
     const scale = Math.sqrt(sizeEcts / 4);
     const size = baseSize * scale;
@@ -220,11 +220,28 @@ window.StudienplanModule = {
     }
 
     const materialButtons = this.renderMaterialButtons(name);
+    const statusButtons = isWahlmodulPlaceholder
+      ? ""
+      : `
+        <div class="module-status-controls" aria-label="Prüfungsversuche">
+          <div class="module-attempt" data-attempt-row="1">
+            <span>1. Versuch</span>
+            <button type="button" class="module-status-button" data-attempt="1" data-module-name="${this.escapeAttribute(name)}" data-module-status="passed" aria-label="1. Versuch bestanden">✓</button>
+            <button type="button" class="module-status-button" data-attempt="1" data-module-name="${this.escapeAttribute(name)}" data-module-status="failed" aria-label="1. Versuch nicht bestanden">✕</button>
+          </div>
+          <div class="module-attempt" data-attempt-row="2">
+            <span>2. Versuch</span>
+            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="passed" aria-label="2. Versuch bestanden">✓</button>
+            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="failed" aria-label="2. Versuch nicht bestanden">✕</button>
+          </div>
+        </div>
+      `;
 
     return `
             <div class="modul ${category} ${placeholderClass}" data-ects="${ects}" style="${style}" ${wahlmodulSourceAttr}>
                 <div class="modul-titel">${name}</div>
                 <div class="modul-kp">${ects} KP</div>
+                ${statusButtons}
                 ${materialButtons}
             </div>
         `;

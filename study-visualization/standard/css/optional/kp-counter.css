@@ -21,6 +21,34 @@
     font-weight: 700;
 }
 
+.kp-status-counters {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.kp-status-counter {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.kp-passed-counter {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.kp-failed-counter {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.kp-status-counter strong {
+    font-weight: 700;
+}
+
 .kp-category {
     padding: 6px;
     background: #fff;

@@ -11,7 +11,7 @@ window.StudienplanTooltip = {
     document.addEventListener("click", (e) => {
       if (
         e.target.closest(
-          ".module-material-button, .module-secondary-link-button",
+          ".module-material-button, .module-secondary-link-button, .module-status-button",
         )
       ) {
         // Link-Buttons werden direkt vom Browser geöffnet
@@ -30,6 +30,18 @@ window.StudienplanTooltip = {
         // Klick außerhalb - Tooltip schließen
         this.hideTooltip();
       }
+    });
+
+    document.addEventListener("click", (e) => {
+      const statusButton = e.target.closest("[data-module-status]");
+      if (!statusButton) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      const moduleName = statusButton.dataset.moduleName;
+      const attempt = statusButton.dataset.attempt;
+      const status = statusButton.dataset.moduleStatus || null;
+      window.StudienplanKPCounter?.setModuleStatus(moduleName, attempt, status);
     });
 
     // Warte bis Details geladen sind, dann füge Indikatoren hinzu

@@ -3,6 +3,8 @@
  */
 
 window.StudienplanKPCounter = {
+  storageKey: "fhnw-cs-assessment-module-status",
+
   initialize() {
     // Verhindere doppelte Initialisierung
     if (this._initialized) return;
@@ -13,6 +15,7 @@ window.StudienplanKPCounter = {
 
     // Berechne und zeige Gesamt-KP
     this.updateTotalKP();
+    this.applyStoredStatuses();
 
     // Starte Beobachtung des DOM, damit Änderungen an Modulen automatisch nachgezählt werden
     this.startMutationObserver();
@@ -44,16 +47,39 @@ window.StudienplanKPCounter = {
       ".semester .module-container .modul:not(.module-kp-exempt)",
     );
     let total = 0;
+    let passed = 0;
+    let failed = 0;
 
     modules.forEach((module) => {
       const ects = parseInt(module.dataset.ects, 10) || 0;
       total += ects;
+      const statuses = this.getModuleStatuses(
+        module.querySelector(".modul-titel")?.textContent,
+      );
+      if (statuses.attempt1 === "passed" || statuses.attempt2 === "passed") {
+        passed += ects;
+      } else if (
+        statuses.attempt1 === "failed" ||
+        statuses.attempt2 === "failed"
+      ) {
+        failed += ects;
+      }
     });
 
     // Zeige in KP-Counter Box
     const counterBox = document.getElementById("kp-counter");
     if (counterBox) {
-      counterBox.innerHTML = `<div id="kp-total">Gesamt: <strong>${total} KP</strong> (mind. 180 KP erforderlich)</div>`;
+      counterBox.innerHTML = `
+        <div id="kp-total">Gesamt: <strong>${total} KP</strong> (mind. 180 KP erforderlich)</div>
+        <div class="kp-status-counters">
+          <div class="kp-status-counter kp-passed-counter">
+            Bestanden: <strong>${passed} KP</strong>
+          </div>
+          <div class="kp-status-counter kp-failed-counter">
+            Nicht bestanden: <strong>${failed} KP</strong>
+          </div>
+        </div>
+      `;
     }
 
     this.updateSemesterCounters();
@@ -86,6 +112,79 @@ window.StudienplanKPCounter = {
     this.updateTotalKP();
   },
 
+  getStatuses() {
+    try {
+      return JSON.parse(localStorage.getItem(this.storageKey) || "{}");
+    } catch (error) {
+      console.warn("Gespeicherte Modulstatus konnten nicht geladen werden:", error);
+      return {};
+    }
+  },
+
+  getModuleStatuses(moduleName) {
+    const stored = this.getStatuses()[moduleName];
+    if (typeof stored === "string") {
+      return { attempt1: stored, attempt2: null };
+    }
+    return stored || { attempt1: null, attempt2: null };
+  },
+
+  setModuleStatus(moduleName, attempt, status) {
+    const statuses = this.getStatuses();
+    const moduleStatuses = this.getModuleStatuses(moduleName);
+    const attemptKey = `attempt${attempt}`;
+    if (status === "passed" || status === "failed") {
+      moduleStatuses[attemptKey] = status;
+    } else {
+      moduleStatuses[attemptKey] = null;
+    }
+    statuses[moduleName] = moduleStatuses;
+
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(statuses));
+    } catch (error) {
+      console.warn("Modulstatus konnte nicht gespeichert werden:", error);
+    }
+
+    document.querySelectorAll(".modul").forEach((module) => {
+      const title = module.querySelector(".modul-titel")?.textContent;
+      if (title === moduleName) this.applyStatus(module, moduleStatuses);
+    });
+    this.updateTotalKP();
+  },
+
+  applyStatus(module, statuses) {
+    const normalized = statuses || { attempt1: null, attempt2: null };
+    module.classList.toggle(
+      "module-passed",
+      normalized.attempt1 === "passed" || normalized.attempt2 === "passed",
+    );
+    module.classList.toggle(
+      "module-failed",
+      !module.classList.contains("module-passed") &&
+        (normalized.attempt1 === "failed" || normalized.attempt2 === "failed"),
+    );
+    module.querySelectorAll(".module-status-button").forEach((button) => {
+      const selected =
+        normalized[`attempt${button.dataset.attempt}`] ===
+        button.dataset.moduleStatus;
+      button.classList.toggle("active", selected);
+    });
+    const secondAttempt = module.querySelector('[data-attempt-row="2"]');
+    if (secondAttempt) {
+      secondAttempt.hidden = normalized.attempt1 === "passed";
+    }
+  },
+
+  applyStoredStatuses() {
+    const statuses = this.getStatuses();
+    document.querySelectorAll(".modul").forEach((module) => {
+      const title = module.querySelector(".modul-titel")?.textContent;
+      this.applyStatus(module, title ? this.getModuleStatuses(title) : null);
+    });
+    this.updateTotalKP();
+  },
+
   // Beobachtet DOM-Änderungen und aktualisiert den KP-Counter bei hinzugefügten/entfernten Modulen
   startMutationObserver() {
     if (this._observer) return;
@@ -111,7 +210,10 @@ window.StudienplanKPCounter = {
             )
           );
         });
-        if (relevant) this.updateTotalKP();
+        if (relevant) {
+          this.applyStoredStatuses();
+          this.updateTotalKP();
+        }
       }, 50);
     });
 

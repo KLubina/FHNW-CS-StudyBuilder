@@ -177,6 +177,11 @@ window.StudienplanConfigLoader = {
         window.StudienplanKPCounter &&
         typeof window.StudienplanKPCounter.updateTotalKP === "function"
       ) {
+        if (
+          typeof window.StudienplanKPCounter.applyStoredStatuses === "function"
+        ) {
+          window.StudienplanKPCounter.applyStoredStatuses();
+        }
         // KP Counter aktualisieren (berechnet aus gerenderten Modulen)
         window.StudienplanKPCounter.updateTotalKP();
       }

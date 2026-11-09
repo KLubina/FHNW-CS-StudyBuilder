@@ -25,6 +25,63 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.modul.module-passed {
+  outline: 4px solid #2e7d32;
+  outline-offset: -4px;
+}
+
+.modul.module-failed {
+  outline: 4px solid #c62828;
+  outline-offset: -4px;
+}
+
+.module-status-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  margin-top: 5px;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.module-attempt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.module-attempt[hidden] {
+  display: none;
+}
+
+.module-attempt span {
+  min-width: 45px;
+  text-align: right;
+}
+
+.module-status-button {
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  color: #fff;
+  cursor: pointer;
+  line-height: 16px;
+  font-size: 12px;
+}
+
+.module-status-button[data-module-status="passed"].active {
+  background: #2e7d32;
+}
+
+.module-status-button[data-module-status="failed"].active {
+  background: #c62828;
+}
+
 /* Modul Title */
 .modul-titel {
   font-weight: bold;
