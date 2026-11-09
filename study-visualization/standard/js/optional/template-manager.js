@@ -505,12 +505,11 @@ window.StudienplanTemplateManager = {
           return;
         }
 
-        // Merge: Neue IDs für importierte Templates generieren um Konflikte zu vermeiden
+        // Neue IDs für importierte Templates generieren, um Konflikte zu vermeiden
         const mergedTemplates = [
           ...importedTemplates.map((template) => ({
             ...template,
             id: this.createTemplateId(),
-            name: `${template.name} (importiert)`,
             updatedAt: new Date().toISOString(),
           })),
           ...currentTemplates,
