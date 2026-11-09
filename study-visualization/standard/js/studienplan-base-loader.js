@@ -13,6 +13,7 @@
 // New base paths reflecting the moved modules into core/ and optional/
 const corePath = "js/core";
 const optionalPath = "js/optional";
+const assetVersion = "20261109-1718";
 
 console.log("📦 Loading Studienplan components (core first, then optional)...");
 
@@ -20,7 +21,7 @@ console.log("📦 Loading Studienplan components (core first, then optional)..."
 async function loadScript(src) {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = src;
+    script.src = `${src}?v=${assetVersion}`;
     script.onerror = () => {
       const error = new Error(`Failed to load ${src}`);
       console.error(`❌ ${error.message}`);

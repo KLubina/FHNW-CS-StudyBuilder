@@ -761,23 +761,13 @@ window.StudienplanWahlmodule = {
     control.className = "studyplan-inline-assignment-control";
     control.innerHTML = inlineAssignmentControls;
 
-    // Platz für die zusätzliche Zuteilungs-Bar schaffen, ohne Breite/Originalstil zu ändern.
-    if (!moduleElement.dataset.inlineAssignmentSized) {
-      const inlineHeight = Number.parseFloat(moduleElement.style.height || "");
-      const measuredHeight = moduleElement.getBoundingClientRect().height;
-      const baseHeight = Number.isFinite(inlineHeight)
-        ? inlineHeight
-        : measuredHeight;
-
-      if (baseHeight > 0) {
-        const controlHeight = hasSecondAssignment ? 58 : 30;
-        moduleElement.style.height = `${Math.round(baseHeight + controlHeight)}px`;
-      }
-
-      moduleElement.dataset.inlineAssignmentSized = "1";
-    }
-
-    moduleElement.appendChild(control);
+    const attemptRows = moduleElement.querySelectorAll(".module-attempt");
+    const assignmentLabels = control.querySelectorAll(
+      ".studyplan-inline-assignment-label",
+    );
+    assignmentLabels.forEach((label, index) => {
+      attemptRows[index]?.prepend(label);
+    });
   },
 
   findAssignment(source, category, assignmentId) {
