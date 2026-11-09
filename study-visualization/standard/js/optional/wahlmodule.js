@@ -98,12 +98,14 @@ window.StudienplanWahlmodule = {
   },
 
   renderProjectAssignmentCard(module, assignment) {
+    const assignmentPair = this.normalizeAssignmentPair(assignment);
     const moduleForRender = {
       ...module,
       standardcategory: this.resolveCategoryClass(module.standardcategory),
     };
-    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-    const assignmentPair = this.normalizeAssignmentPair(assignment);
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender, {
+      secondAttemptEnabled: assignmentPair.second != null,
+    });
 
     return `
       <div class="projekt-assignment-card" data-project-name="${this.escapeHtml(module.name)}">
@@ -198,12 +200,14 @@ window.StudienplanWahlmodule = {
   },
 
   renderAssessmentAssignmentCard(module, assignment) {
+    const assignmentPair = this.normalizeAssignmentPair(assignment);
     const moduleForRender = {
       ...module,
       standardcategory: this.resolveCategoryClass(module.standardcategory),
     };
-    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
-    const assignmentPair = this.normalizeAssignmentPair(assignment);
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender, {
+      secondAttemptEnabled: assignmentPair.second != null,
+    });
 
     return `
       <div class="assessment-assignment-card" data-assessment-name="${this.escapeHtml(module.name)}">
@@ -480,7 +484,9 @@ window.StudienplanWahlmodule = {
       `;
     };
 
-    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender);
+    const moduleHTML = window.StudienplanModule.renderModule(moduleForRender, {
+      secondAttemptEnabled: assignment.semester2 != null,
+    });
 
     return `
       <div class="wahlmodul-assignment-card ${mode === "plan" ? "is-plan-card" : "is-selection-card"}" data-assignment-id="${this.escapeHtml(assignment.id)}" data-assignment-semester="${assignment.semester == null ? "" : assignment.semester}" data-wahlmodul-source="${this.escapeHtml(source)}" data-wahlmodul-category="${this.escapeHtml(category)}">
@@ -565,6 +571,23 @@ window.StudienplanWahlmodule = {
       ...meta,
       semester: normalizedSemester,
     });
+    const secondAttemptEnabled =
+      meta.assignmentSlot === "second" ||
+      (meta.assignmentKind === "wahlmodul"
+        ? this.findAssignment(meta.source, meta.category, meta.assignmentId)
+            ?.semester2 != null
+        : meta.assignmentKind === "project"
+          ? this.loadPersistedProjectAssignments()[meta.projectName]?.second !=
+            null
+          : meta.assignmentKind === "assessment"
+            ? this.loadPersistedAssessmentAssignments()[meta.assessmentName]
+                ?.second != null
+            : false);
+    moduleElement
+      .querySelectorAll('[data-attempt="2"]')
+      .forEach((button) => {
+        button.disabled = !secondAttemptEnabled;
+      });
     container.appendChild(moduleElement);
   },
 

@@ -35,6 +35,7 @@ window.StudienplanTooltip = {
     document.addEventListener("click", (e) => {
       const statusButton = e.target.closest("[data-module-status]");
       if (!statusButton) return;
+      if (statusButton.disabled) return;
 
       e.preventDefault();
       e.stopPropagation();

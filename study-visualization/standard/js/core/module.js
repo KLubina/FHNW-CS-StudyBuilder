@@ -192,7 +192,7 @@ window.StudienplanModule = {
   },
 
   // Erstelle HTML für ein einzelnes Modul
-  renderModule(module) {
+  renderModule(module, options = {}) {
     const baseEcts = module.ects || 0;
     const isWahlmodulPlaceholder = !!(
       module.isPlaceholder && module.wahlmodulSource
@@ -200,6 +200,7 @@ window.StudienplanModule = {
     const ects = isWahlmodulPlaceholder ? 0 : baseEcts;
     const category = module.standardcategory || "unknown";
     const name = module.name || "Unbekanntes Modul";
+    const secondAttemptEnabled = options.secondAttemptEnabled !== false;
     const titleLengthClass =
       name.length > 35
         ? "modul-titel-extra-kompakt"
@@ -235,8 +236,8 @@ window.StudienplanModule = {
             <button type="button" class="module-status-button" data-attempt="1" data-module-name="${this.escapeAttribute(name)}" data-module-status="failed" aria-label="1. Versuch nicht bestanden">✕</button>
           </div>
           <div class="module-attempt" data-attempt-row="2">
-            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="passed" aria-label="2. Versuch bestanden">✓</button>
-            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="failed" aria-label="2. Versuch nicht bestanden">✕</button>
+            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="passed" aria-label="2. Versuch bestanden" ${secondAttemptEnabled ? "" : "disabled"}>✓</button>
+            <button type="button" class="module-status-button" data-attempt="2" data-module-name="${this.escapeAttribute(name)}" data-module-status="failed" aria-label="2. Versuch nicht bestanden" ${secondAttemptEnabled ? "" : "disabled"}>✕</button>
           </div>
         </div>
       `;

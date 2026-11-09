@@ -80,6 +80,11 @@
   font-size: 10px;
 }
 
+.module-status-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .module-status-button[data-module-status="passed"].active {
   background: #2e7d32;
 }

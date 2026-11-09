@@ -53,9 +53,7 @@ window.StudienplanKPCounter = {
     modules.forEach((module) => {
       const ects = parseInt(module.dataset.ects, 10) || 0;
       total += ects;
-      const statuses = this.getModuleStatuses(
-        module.querySelector(".modul-titel")?.textContent,
-      );
+      const statuses = this.getEffectiveModuleStatuses(module);
       if (statuses.attempt1 === "passed" || statuses.attempt2 === "passed") {
         passed += ects;
       } else if (
@@ -129,6 +127,18 @@ window.StudienplanKPCounter = {
     return stored || { attempt1: null, attempt2: null };
   },
 
+  getEffectiveModuleStatuses(module) {
+    const moduleName = module.querySelector(".modul-titel")?.textContent;
+    const statuses = this.getModuleStatuses(moduleName);
+    const secondAttemptAvailable = !!module.querySelector(
+      '[data-attempt="2"]:not(:disabled)',
+    );
+
+    return secondAttemptAvailable
+      ? statuses
+      : { ...statuses, attempt2: null };
+  },
+
   setModuleStatus(moduleName, attempt, status) {
     const statuses = this.getStatuses();
     const moduleStatuses = this.getModuleStatuses(moduleName);
@@ -154,7 +164,13 @@ window.StudienplanKPCounter = {
   },
 
   applyStatus(module, statuses) {
-    const normalized = statuses || { attempt1: null, attempt2: null };
+    const effectiveStatuses = this.getEffectiveModuleStatuses(module);
+    const normalized = statuses
+      ? {
+          ...statuses,
+          attempt2: effectiveStatuses.attempt2,
+        }
+      : effectiveStatuses;
     module.classList.toggle(
       "module-passed",
       normalized.attempt1 === "passed" || normalized.attempt2 === "passed",
